@@ -5,13 +5,12 @@ import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     title: qsTr("Hello World")
-    width: 640
+    width: 1000
     height: 480
     visible: true
 
     Canvas {
-        width: 400
-        height: 400
+        anchors.fill: parent
 
         onPaint: {
             // Get drawing context
@@ -22,35 +21,87 @@ ApplicationWindow {
             context.clearRect(0, 0, width, height);
             context.fill();
 
-            // Fill inside with blue, leaving 10 pixel border
-            context.beginPath();
-            context.fillStyle = "blue"
-            context.fillRect(10, 10, width - 20, height - 20);
-            context.fill();
+            var baseLength = 200
 
-            // Draw a line
+            // Outer line
             context.beginPath();
-            context.lineWidth = 2;
-            context.moveTo(30, 30);
             context.strokeStyle = "red"
-            context.lineTo(width-30, height-30);
+            context.arc(width/2 - baseLength, height/2, 180, Math.PI/2, -Math.PI/2, false)
+            context.arc(width/2 + baseLength, height/2, 180, -Math.PI/2, Math.PI/2, false)
+            context.lineTo(width/2 - baseLength, height/2 + 180)
             context.stroke();
 
-            // Draw a circle
+            // Inner line
             context.beginPath();
-            context.fillStyle = "orange"
+            context.strokeStyle = "blue"
+
+            context.arc(width/2 - baseLength, height/2, 150, Math.PI/2, -Math.PI/2, false)
+            context.arc(width/2 + baseLength, height/2, 150, -Math.PI/2, Math.PI/2, false)
+            context.lineTo(width/2 - baseLength, height/2 + 150)
+
+            context.stroke()
+
+            // RH Outer points
+            context.beginPath();
             context.strokeStyle = "red"
-            context.moveTo(width/2+60, height/2);
-            context.arc(width/2, height/2, 60, 0, 2*Math.PI, true)
-            context.fill();
-            context.stroke();
 
-            // Draw some text
+            context.moveTo(width/2 + baseLength - 30, height/2 + 150)
+            context.lineTo(width/2 + baseLength, height/2 + 180)
+            context.stroke()
+
+            // LH Outer points
             context.beginPath();
-            context.strokeStyle = "lime green"
-            context.font = "20px sans-serif";
-            context.text("Hello, world!", width/2, 50);
-            context.stroke();
+            context.strokeStyle = "red"
+
+            context.moveTo(width/2 - baseLength + 30, height/2 + 150)
+            context.lineTo(width/2 - baseLength, height/2 + 180)
+            context.stroke()
+
+            // Station outer
+            context.beginPath();
+            context.strokeStyle = "green"
+
+            context.moveTo(width/2 + baseLength - 30, height/2 + 150)
+            context.lineTo(width/2 + baseLength - 60, height/2 + 120)
+            context.lineTo(width/2 - baseLength - 60, height/2 + 120)
+            context.stroke()
+
+            // Station inner
+            context.beginPath();
+            context.strokeStyle = "green"
+
+            context.moveTo(width/2 + baseLength - 60, height/2 + 120)
+            context.lineTo(width/2 + baseLength - 90, height/2 + 90)
+            context.lineTo(width/2 - baseLength+30, height/2 + 90)
+            context.lineTo(width/2 - baseLength, height/2 + 120)
+            context.stroke()
+
+            // LH Sidings
+            context.beginPath();
+            context.strokeStyle = "green"
+
+            context.moveTo(width/2 - baseLength+30, height/2 + 90)
+            context.lineTo(width/2 - baseLength - 90, height/2 + 90)
+            context.moveTo(width/2 - baseLength, height/2 + 90)
+            context.lineTo(width/2 - baseLength - 90, height/2 + 60)
+            context.moveTo(width/2 - baseLength, height/2 + 90)
+            context.lineTo(width/2 - baseLength - 90, height/2 + 30)
+            context.stroke()
+
+            // RH Sidings
+            context.beginPath();
+            context.strokeStyle = "green"
+
+            context.moveTo(width/2 + baseLength - 90, height/2 + 90)
+            context.lineTo(width/2 + baseLength - 60, height/2 + 90)
+            context.moveTo(width/2 + baseLength - 90, height/2 + 120)
+            context.lineTo(width/2 + baseLength + 60, height/2 + 120)
+            context.moveTo(width/2 + baseLength - 30, height/2 + 120)
+            context.lineTo(width/2 + baseLength + 60, height/2 + 90)
+            context.moveTo(width/2 + baseLength - 30, height/2 + 120)
+            context.lineTo(width/2 + baseLength + 60, height/2 + 60)
+            context.stroke()
+
         }
     }
 
