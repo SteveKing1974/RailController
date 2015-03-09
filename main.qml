@@ -4,14 +4,24 @@ import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
+    id: topLevel
+
     title: qsTr("Hello World")
-    width: 640
+    width: 1000
     height: 480
     visible: true
 
+    property int baseLength: 200
+
+    property variant controllerNames: ["Off", "Controller 1", "Controller 2", "Controller 3"]
+    property variant controllerColours: ["black", "red", "blue", "green"]
+    property variant outerTop: [0, [0, 1]]
+
+
+
     Canvas {
-        width: 400
-        height: 400
+        id: trackDisplay
+        anchors.fill: parent
 
         onPaint: {
             // Get drawing context
@@ -22,37 +32,184 @@ ApplicationWindow {
             context.clearRect(0, 0, width, height);
             context.fill();
 
-            // Fill inside with blue, leaving 10 pixel border
-            context.beginPath();
-            context.fillStyle = "blue"
-            context.fillRect(10, 10, width - 20, height - 20);
-            context.fill();
 
-            // Draw a line
+            // Outer line
             context.beginPath();
-            context.lineWidth = 2;
-            context.moveTo(30, 30);
+            context.strokeStyle = controllerColours[outerTop[0]]
+            context.arc(width/2 - baseLength, height/2, 180, Math.PI/2, -Math.PI/2, false)
+            context.arc(width/2 + baseLength, height/2, 180, -Math.PI/2, Math.PI/2, false)
+            context.stroke();
+
+            context.beginPath()
             context.strokeStyle = "red"
-            context.lineTo(width-30, height-30);
+            context.moveTo(width/2 + baseLength, height/2 + 180)
+            context.lineTo(width/2 - baseLength, height/2 + 180)
             context.stroke();
 
-            // Draw a circle
+            // Inner line
             context.beginPath();
-            context.fillStyle = "orange"
+            context.strokeStyle = "blue"
+
+            context.arc(width/2 - baseLength, height/2, 150, Math.PI/2, -Math.PI/2, false)
+            context.arc(width/2 + baseLength, height/2, 150, -Math.PI/2, Math.PI/2, false)
+            context.lineTo(width/2 - baseLength, height/2 + 150)
+
+            context.stroke()
+
+            // RH Outer points
+            context.beginPath();
             context.strokeStyle = "red"
-            context.moveTo(width/2+60, height/2);
-            context.arc(width/2, height/2, 60, 0, 2*Math.PI, true)
-            context.fill();
-            context.stroke();
 
-            // Draw some text
+            context.moveTo(width/2 + baseLength - 30, height/2 + 150)
+            context.lineTo(width/2 + baseLength, height/2 + 180)
+            context.stroke()
+
+            // LH Outer points
             context.beginPath();
-            context.strokeStyle = "lime green"
-            context.font = "20px sans-serif";
-            context.text("Hello, world!", width/2, 50);
-            context.stroke();
+            context.strokeStyle = "red"
+
+            context.moveTo(width/2 - baseLength + 30, height/2 + 150)
+            context.lineTo(width/2 - baseLength, height/2 + 180)
+            context.stroke()
+
+            // Station outer
+            context.beginPath();
+            context.strokeStyle = "green"
+
+            context.moveTo(width/2 + baseLength - 30, height/2 + 150)
+            context.lineTo(width/2 + baseLength - 60, height/2 + 120)
+            context.lineTo(width/2 - baseLength - 60, height/2 + 120)
+            context.stroke()
+
+            // Station inner
+            context.beginPath();
+            context.strokeStyle = "green"
+
+            context.moveTo(width/2 + baseLength - 60, height/2 + 120)
+            context.lineTo(width/2 + baseLength - 90, height/2 + 90)
+            context.lineTo(width/2 - baseLength+30, height/2 + 90)
+            context.lineTo(width/2 - baseLength, height/2 + 120)
+            context.stroke()
+
+            // LH Sidings
+            context.beginPath();
+            context.strokeStyle = "green"
+
+            context.moveTo(width/2 - baseLength+30, height/2 + 90)
+            context.lineTo(width/2 - baseLength - 90, height/2 + 90)
+            context.moveTo(width/2 - baseLength, height/2 + 90)
+            context.lineTo(width/2 - baseLength - 90, height/2 + 60)
+            context.moveTo(width/2 - baseLength, height/2 + 90)
+            context.lineTo(width/2 - baseLength - 90, height/2 + 30)
+            context.stroke()
+
+            // RH Sidings
+            context.beginPath();
+            context.strokeStyle = "green"
+
+            context.moveTo(width/2 + baseLength - 90, height/2 + 90)
+            context.lineTo(width/2 + baseLength - 60, height/2 + 90)
+            context.moveTo(width/2 + baseLength - 90, height/2 + 120)
+            context.lineTo(width/2 + baseLength + 60, height/2 + 120)
+            context.moveTo(width/2 + baseLength - 30, height/2 + 120)
+            context.lineTo(width/2 + baseLength + 60, height/2 + 90)
+            context.moveTo(width/2 + baseLength - 30, height/2 + 120)
+            context.lineTo(width/2 + baseLength + 60, height/2 + 60)
+            context.stroke()
+
         }
     }
+
+    MouseArea {
+        id: selectControllerDlg
+
+        anchors.fill: parent
+
+        onClicked: selectControllerDlg.visible = false
+
+        visible: false
+
+        z: 2
+
+        Rectangle {
+            color: "black"
+            opacity: 0.5
+            anchors.fill: parent
+        }
+
+        onVisibleChanged: {
+            if (!visible)
+            {
+                popupContent.v = []
+            }
+        }
+
+        function selectController(controllerVar)
+        {
+            popupContent.v = controllerVar
+            visible = true
+        }
+
+        function refreshDisplay()
+        {
+            trackDisplay.requestPaint()
+        }
+
+
+        Rectangle {
+            id: popupRect
+
+            anchors.centerIn: parent
+
+            color: "white"
+            width: 200
+            height: 200
+
+            border.color: "black"
+            border.width: 4
+            radius: 10
+
+            ListView {
+                id: popupContent
+
+                anchors.fill: parent
+                anchors.margins: 30
+
+                property variant v: []
+
+                model: v.length==2 ? v[1].length : null
+                delegate: Text {
+                    text: controllerNames[popupContent.v[1][index]]
+                    height: 30
+                    color: "black"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            popupContent.v[0] = index
+                            selectControllerDlg.refreshDisplay()
+                            selectControllerDlg.visible = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Click points
+    Rectangle {
+        x: parent.width/2 - 10
+        y: parent.height/2 - 190
+        width: 20
+        height: 20
+        color: controllerColours[outerTop[0]]
+
+        MouseArea{
+            anchors.fill: parent
+            onClicked: selectControllerDlg.selectController(outerTop)
+        }
+    }
+
+
 
 //    menuBar: MenuBar {
 //        Menu {
