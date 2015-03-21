@@ -3,13 +3,34 @@ import QtQuick.Controls 1.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 
+import com.elmsoft.qmlcomponents 1.0
+
 ApplicationWindow {
+    id: topLevel
+
     title: qsTr("Hello World")
     width: 1000
     height: 480
     visible: true
 
+    LineStateModel {
+        id: lineModel
+    }
+
+    property int baseLength: 200
+
+    property variant clickBoxes: [
+        [topLevel.width/2 - 10, topLevel.height/2 - 190],
+        [topLevel.width/2 - 10, topLevel.height/2+170],
+        [topLevel.width/2 - 10, topLevel.height/2-160],
+        [topLevel.width/2 - 10, topLevel.height/2+140],
+        [topLevel.width/2 - 10, topLevel.height/2+110],
+        [topLevel.width/2 - baseLength - 30 - 10, topLevel.height/2+110],
+    ]
+
+
     Canvas {
+        id: trackDisplay
         anchors.fill: parent
 
         onPaint: {
@@ -21,29 +42,38 @@ ApplicationWindow {
             context.clearRect(0, 0, width, height);
             context.fill();
 
-            var baseLength = 200
 
             // Outer line
             context.beginPath();
-            context.strokeStyle = "red"
+            context.strokeStyle = lineModel.sectionColour(0);
             context.arc(width/2 - baseLength, height/2, 180, Math.PI/2, -Math.PI/2, false)
             context.arc(width/2 + baseLength, height/2, 180, -Math.PI/2, Math.PI/2, false)
+            context.stroke();
+
+            context.beginPath()
+            context.strokeStyle = lineModel.sectionColour(1)
+            context.moveTo(width/2 + baseLength, height/2 + 180)
             context.lineTo(width/2 - baseLength, height/2 + 180)
             context.stroke();
 
             // Inner line
             context.beginPath();
-            context.strokeStyle = "blue"
+            context.strokeStyle = lineModel.sectionColour(2)
 
             context.arc(width/2 - baseLength, height/2, 150, Math.PI/2, -Math.PI/2, false)
             context.arc(width/2 + baseLength, height/2, 150, -Math.PI/2, Math.PI/2, false)
+            context.stroke();
+
+            context.beginPath()
+            context.strokeStyle = lineModel.sectionColour(3)
+            context.moveTo(width/2 + baseLength, height/2 + 150)
             context.lineTo(width/2 - baseLength, height/2 + 150)
 
             context.stroke()
 
             // RH Outer points
             context.beginPath();
-            context.strokeStyle = "red"
+            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
 
             context.moveTo(width/2 + baseLength - 30, height/2 + 150)
             context.lineTo(width/2 + baseLength, height/2 + 180)
@@ -51,20 +81,34 @@ ApplicationWindow {
 
             // LH Outer points
             context.beginPath();
-            context.strokeStyle = "red"
+            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
 
             context.moveTo(width/2 - baseLength + 30, height/2 + 150)
             context.lineTo(width/2 - baseLength, height/2 + 180)
             context.stroke()
 
-            // Station outer
+            // Station outer points
             context.beginPath();
-            context.strokeStyle = "green"
-
+            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
             context.moveTo(width/2 + baseLength - 30, height/2 + 150)
             context.lineTo(width/2 + baseLength - 60, height/2 + 120)
-            context.lineTo(width/2 - baseLength - 60, height/2 + 120)
             context.stroke()
+
+
+            // Station outer
+            context.beginPath();
+            context.strokeStyle = lineModel.sectionColour(4)
+            context.moveTo(width/2 + baseLength - 60, height/2 + 120)
+            context.lineTo(width/2 - baseLength, height/2 + 120)
+            context.stroke()
+
+            // Run around
+            context.beginPath();
+            context.strokeStyle = lineModel.sectionColour(5)
+            context.moveTo(width/2 - baseLength, height/2 + 120)
+            context.lineTo(width/2 - baseLength - 60, height/2 + 120)
+            context.stroke();
+
 
             // Station inner
             context.beginPath();
@@ -105,34 +149,99 @@ ApplicationWindow {
         }
     }
 
-//    menuBar: MenuBar {
-//        Menu {
-//            title: qsTr("&File")
-//            MenuItem {
-//                text: qsTr("&Open")
-//                onTriggered: messageDialog.show(qsTr("Open action triggered"));
-//            }
-//            MenuItem {
-//                text: qsTr("E&xit")
-//                onTriggered: Qt.quit();
-//            }
-//        }
-//    }
+    MouseArea {
+        id: selectControllerDlg
 
-//    MainForm {
-//        anchors.fill: parent
-//        button1.onClicked: messageDialog.show(qsTr("Button 1 pressed"))
-//        button2.onClicked: messageDialog.show(qsTr("Button 2 pressed"))
-//        button3.onClicked: messageDialog.show(qsTr("Button 3 pressed"))
-//    }
+        anchors.fill: parent
 
-//    MessageDialog {
-//        id: messageDialog
-//        title: qsTr("May I have your attention, please?")
+        onClicked: selectControllerDlg.visible = false
 
-//        function show(caption) {
-//            messageDialog.text = caption;
-//            messageDialog.open();
-//        }
-//    }
+        visible: false
+
+        z: 2
+
+        Rectangle {
+            color: "black"
+            opacity: 0.5
+            anchors.fill: parent
+        }
+
+        onVisibleChanged: {
+            if (!visible)
+            {
+                popupContent.modelIndex = -1
+                popupContent.v = []
+            }
+        }
+
+        function selectController(sectionIndex, possibleControllers)
+        {
+            popupContent.modelIndex = sectionIndex
+            popupContent.v = possibleControllers
+            visible = true
+        }
+
+        function refreshDisplay()
+        {
+            trackDisplay.requestPaint()
+        }
+
+
+        Rectangle {
+            id: popupRect
+
+            anchors.centerIn: parent
+
+            color: "white"
+            width: 200
+            height: 200
+
+            border.color: "black"
+            border.width: 4
+            radius: 10
+
+            ListView {
+                id: popupContent
+
+                anchors.fill: parent
+                anchors.margins: 30
+
+                property variant v: []
+                property int modelIndex: -1
+
+                model: v
+                delegate: Text {
+                    text: lineModel.controllerName(popupContent.v[index])
+                    height: 30
+                    color: "black"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            lineModel.changeController(popupContent.modelIndex, popupContent.v[index])
+                            selectControllerDlg.refreshDisplay()
+                            selectControllerDlg.visible = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Click points
+    Repeater {
+        model: lineModel
+        Rectangle {
+            x: clickBoxes[index][0]
+            y: clickBoxes[index][1]
+            width: 20
+            height: 20
+            color: lineModel.controllerColour(controllerID)
+
+            MouseArea{
+                anchors.fill: parent
+                onClicked: selectControllerDlg.selectController(index, possibleControllers)
+            }
+        }
+    }
+
 }
