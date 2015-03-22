@@ -10,6 +10,13 @@ LineStateModel::LineStateModel()
     m_Data.push_back(SectionData("3;Inner Bottom;0;0,1,2"));
     m_Data.push_back(SectionData("4;Station Outer;0;0,1,2,3"));
     m_Data.push_back(SectionData("5;Run Around;0;0,1,2,3"));
+    m_Data.push_back(SectionData("6;Station Inner;0;0,1,2,3"));
+
+    m_Data.push_back(SectionData("7;Left Siding Bottom;0;0,1,2,3"));
+    m_Data.push_back(SectionData("8;Left Siding Middle;0;0,1,2,3"));
+    m_Data.push_back(SectionData("9;Left Siding Top;0;0,1,2,3"));
+
+    m_Data.push_back(SectionData("10;Right Hand Loading;0;0,1,2,3"));
 }
 
 LineStateModel::~LineStateModel()

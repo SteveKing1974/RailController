@@ -25,7 +25,14 @@ ApplicationWindow {
         [topLevel.width/2 - 10, topLevel.height/2-160],
         [topLevel.width/2 - 10, topLevel.height/2+140],
         [topLevel.width/2 - 10, topLevel.height/2+110],
-        [topLevel.width/2 - baseLength - 30 - 10, topLevel.height/2+110],
+        [topLevel.width/2 - baseLength - 40, topLevel.height/2+110],
+        [topLevel.width/2 - 10, topLevel.height/2+80],
+
+        [topLevel.width/2 - baseLength - 70, topLevel.height/2+80],
+        [topLevel.width/2 - baseLength - 75, topLevel.height/2+50],
+        [topLevel.width/2 - baseLength - 80, topLevel.height/2+20],
+
+        [topLevel.width/2 + baseLength - 60, topLevel.height/2+80],
     ]
 
 
@@ -110,40 +117,73 @@ ApplicationWindow {
             context.stroke();
 
 
-            // Station inner
+            // Station inner entry/exit points
             context.beginPath();
-            context.strokeStyle = "green"
-
+            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
             context.moveTo(width/2 + baseLength - 60, height/2 + 120)
             context.lineTo(width/2 + baseLength - 90, height/2 + 90)
-            context.lineTo(width/2 - baseLength+30, height/2 + 90)
+            context.stroke()
+            context.beginPath();
+            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
+            context.moveTo(width/2 - baseLength+30, height/2 + 90)
             context.lineTo(width/2 - baseLength, height/2 + 120)
             context.stroke()
 
-            // LH Sidings
+            // Station inner
             context.beginPath();
-            context.strokeStyle = "green"
+            context.strokeStyle = lineModel.sectionColour(6)
+            context.moveTo(width/2 + baseLength - 90, height/2 + 90)
+            context.lineTo(width/2 - baseLength + 10, height/2 + 90)
+            context.stroke();
 
-            context.moveTo(width/2 - baseLength+30, height/2 + 90)
+            // LH Sidings entry points
+            context.beginPath();
+            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
+            context.moveTo(width/2 - baseLength + 10, height/2 + 90)
+            context.lineTo(width/2 - baseLength - 50, height/2 + 30)
+            context.stroke()
+
+            // LH Sidings bottom
+            context.beginPath();
+            context.strokeStyle = lineModel.sectionColour(7)
+            context.moveTo(width/2 - baseLength + 10, height/2 + 90)
             context.lineTo(width/2 - baseLength - 90, height/2 + 90)
-            context.moveTo(width/2 - baseLength, height/2 + 90)
+            context.stroke()
+
+            // LH Sidings middle
+            context.beginPath();
+            context.strokeStyle = lineModel.sectionColour(8)
+            context.moveTo(width/2 - baseLength - 20, height/2 + 60)
             context.lineTo(width/2 - baseLength - 90, height/2 + 60)
-            context.moveTo(width/2 - baseLength, height/2 + 90)
+            context.stroke()
+
+            // LH Sidings top
+            context.beginPath();
+            context.strokeStyle = lineModel.sectionColour(9)
+            context.moveTo(width/2 - baseLength - 50, height/2 + 30)
             context.lineTo(width/2 - baseLength - 90, height/2 + 30)
             context.stroke()
 
-            // RH Sidings
+            // RH Station loading
             context.beginPath();
-            context.strokeStyle = "green"
-
+            context.strokeStyle = lineModel.sectionColour(10)
             context.moveTo(width/2 + baseLength - 90, height/2 + 90)
-            context.lineTo(width/2 + baseLength - 60, height/2 + 90)
-            context.moveTo(width/2 + baseLength - 90, height/2 + 120)
-            context.lineTo(width/2 + baseLength + 60, height/2 + 120)
-            context.moveTo(width/2 + baseLength - 30, height/2 + 120)
-            context.lineTo(width/2 + baseLength + 60, height/2 + 90)
-            context.moveTo(width/2 + baseLength - 30, height/2 + 120)
-            context.lineTo(width/2 + baseLength + 60, height/2 + 60)
+            context.lineTo(width/2 + baseLength - 30, height/2 + 90)
+            context.stroke()
+
+            // RH Sidings entry points
+            context.beginPath();
+            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
+            context.moveTo(width/2 + baseLength - 60, height/2 + 120)
+            context.lineTo(width/2 + baseLength - 30, height/2 + 120)
+            context.lineTo(width/2 + baseLength + 30, height/2 + 60)
+
+//            context.moveTo(width/2 + baseLength - 90, height/2 + 120)
+//            context.lineTo(width/2 + baseLength + 60, height/2 + 120)
+//            context.moveTo(width/2 + baseLength - 30, height/2 + 120)
+//            context.lineTo(width/2 + baseLength + 60, height/2 + 90)
+//            context.moveTo(width/2 + baseLength - 30, height/2 + 120)
+//            context.lineTo(width/2 + baseLength + 60, height/2 + 60)
             context.stroke()
 
         }
