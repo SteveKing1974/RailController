@@ -4,7 +4,8 @@ QT += qml quick widgets network
 
 SOURCES += main.cpp \
     remoteping.cpp \
-    linestatemodel.cpp
+    linestatemodel.cpp \
+    commandclient.cpp
 
 RESOURCES += qml.qrc
 
@@ -16,4 +17,5 @@ include(deployment.pri)
 
 HEADERS += \
     remoteping.h \
-    linestatemodel.h
+    linestatemodel.h \
+    commandclient.h

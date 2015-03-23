@@ -17,6 +17,10 @@ LineStateModel::LineStateModel()
     m_Data.push_back(SectionData("9;Left Siding Top;0;0,1,2,3"));
 
     m_Data.push_back(SectionData("10;Right Hand Loading;0;0,1,2,3"));
+
+    m_Data.push_back(SectionData("11;Right Siding Lower;0;0,1,2,3"));
+    m_Data.push_back(SectionData("12;Right Siding Middle;0;0,1,2,3"));
+    m_Data.push_back(SectionData("13;Right Siding Bottom;0;0,1,2,3"));
 }
 
 LineStateModel::~LineStateModel()

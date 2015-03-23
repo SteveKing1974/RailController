@@ -33,6 +33,10 @@ ApplicationWindow {
         [topLevel.width/2 - baseLength - 80, topLevel.height/2+20],
 
         [topLevel.width/2 + baseLength - 60, topLevel.height/2+80],
+
+        [topLevel.width/2 + baseLength + 20, topLevel.height/2+110],
+        [topLevel.width/2 + baseLength + 30, topLevel.height/2+80],
+        [topLevel.width/2 + baseLength + 40, topLevel.height/2+50],
     ]
 
 
@@ -69,13 +73,16 @@ ApplicationWindow {
 
             context.arc(width/2 - baseLength, height/2, 150, Math.PI/2, -Math.PI/2, false)
             context.arc(width/2 + baseLength, height/2, 150, -Math.PI/2, Math.PI/2, false)
+            context.moveTo(width/2 + baseLength, height/2 + 150)
+            context.lineTo(width/2 + baseLength - 30, height/2 + 150)
+            context.moveTo(width/2 - baseLength, height/2 + 150)
+            context.lineTo(width/2 - baseLength + 30, height/2 + 150)
             context.stroke();
 
             context.beginPath()
             context.strokeStyle = lineModel.sectionColour(3)
-            context.moveTo(width/2 + baseLength, height/2 + 150)
-            context.lineTo(width/2 - baseLength, height/2 + 150)
-
+            context.moveTo(width/2 + baseLength - 30, height/2 + 150)
+            context.lineTo(width/2 - baseLength + 30, height/2 + 150)
             context.stroke()
 
             // RH Outer points
@@ -177,15 +184,28 @@ ApplicationWindow {
             context.moveTo(width/2 + baseLength - 60, height/2 + 120)
             context.lineTo(width/2 + baseLength - 30, height/2 + 120)
             context.lineTo(width/2 + baseLength + 30, height/2 + 60)
-
-//            context.moveTo(width/2 + baseLength - 90, height/2 + 120)
-//            context.lineTo(width/2 + baseLength + 60, height/2 + 120)
-//            context.moveTo(width/2 + baseLength - 30, height/2 + 120)
-//            context.lineTo(width/2 + baseLength + 60, height/2 + 90)
-//            context.moveTo(width/2 + baseLength - 30, height/2 + 120)
-//            context.lineTo(width/2 + baseLength + 60, height/2 + 60)
             context.stroke()
 
+            // RH Sidings lower
+            context.beginPath();
+            context.strokeStyle = lineModel.sectionColour(11)
+            context.moveTo(width/2 + baseLength - 30, height/2 + 120)
+            context.lineTo(width/2 + baseLength + 60, height/2 + 120)
+            context.stroke()
+
+            // RH Sidings middle
+            context.beginPath();
+            context.strokeStyle = lineModel.sectionColour(12)
+            context.moveTo(width/2 + baseLength , height/2 + 90)
+            context.lineTo(width/2 + baseLength + 70, height/2 + 90)
+            context.stroke()
+
+            // RH Sidings upper
+            context.beginPath();
+            context.strokeStyle = lineModel.sectionColour(13)
+            context.moveTo(width/2 + baseLength + 30, height/2 + 60)
+            context.lineTo(width/2 + baseLength + 80, height/2 + 60)
+            context.stroke()
         }
     }
 
@@ -276,6 +296,8 @@ ApplicationWindow {
             width: 20
             height: 20
             color: lineModel.controllerColour(controllerID)
+
+            radius: 10
 
             MouseArea{
                 anchors.fill: parent
