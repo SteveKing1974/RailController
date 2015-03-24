@@ -42,17 +42,19 @@ void CommandClient::sendData()
 
 void CommandClient::gotData()
 {
-    while (m_pSock->bytesAvailable())
-    {
-        m_Data.append(m_pSock->read(m_BytesExpected - m_Data.length()));
+    QDataStream strm(m_pSock);
 
-        if ((m_BytesExpected - m_Data.length()) == 0)
-        {
-            if (m_WaitingForHeader)
-            {
-                m_BytesExpected = m_Data.toInt();
-            }
-        }
+    char* s = 0;
+    uint l = 0;
+    strm.readBytes(s, l);
+    QByteArray data(s, l);
+    delete [] s;
+
+    QJsonDocument cmdDoc = QJsonDocument::fromBinaryData(data);
+    QJsonObject cmdObj = cmdDoc.object();
+    if (cmdObj.value("Command").toString()=="GetState")
+    {
+        emit gotState(SectionData::fromJsonDoc(cmdDoc));
     }
 }
 

@@ -5,6 +5,8 @@
 #include <QAbstractListModel>
 #include <QColor>
 
+#include "sectiondata.h"
+
 class LineStateModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -43,14 +45,6 @@ public slots:
     void changeController(int sectionIndex, int controllerId);
 
 private:
-    struct SectionData {
-        SectionData(const QString& init);
-
-        int m_Id;
-        QString m_Name;
-        LineStateModel::ControllerID m_ControllerId;
-        QVariantList m_PossibleControllers;
-    };
 
     QList<SectionData> m_Data;
 };

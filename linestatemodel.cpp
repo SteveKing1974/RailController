@@ -125,7 +125,7 @@ QColor LineStateModel::sectionColour(int sectionIndex) const
         return Qt::yellow;
     }
 
-    return controllerColour(m_Data.at(sectionIndex).m_ControllerId);
+    return controllerColour(static_cast<LineStateModel::ControllerID>(m_Data.at(sectionIndex).m_ControllerId));
 }
 
 void LineStateModel::changeController(int sectionIndex, int controllerId)
@@ -141,18 +141,3 @@ void LineStateModel::changeController(int sectionIndex, int controllerId)
 }
 
 
-
-
-LineStateModel::SectionData::SectionData(const QString &init)
-{
-    const QStringList i = init.split(";");
-
-    m_Id = i.at(0).toInt();
-    m_Name = i.at(1);
-    m_ControllerId = static_cast<LineStateModel::ControllerID>(i.at(2).toInt());
-
-    foreach (const QString& s, i.at(3).split(","))
-    {
-        m_PossibleControllers.push_back(QVariant(s.toInt(0)));
-    }
-}

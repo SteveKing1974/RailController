@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QByteArray>
+#include "sectiondata.h"
 
 class QTcpSocket;
 
@@ -18,6 +19,12 @@ signals:
 public slots:
     void sendData();
     void gotData();
+
+signals:
+    void connected();
+    void error();
+    void gotState(const QList<SectionData>& data);
+
 
 private:
     QTcpSocket* m_pSock;
