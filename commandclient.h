@@ -10,28 +10,32 @@ class QTcpSocket;
 class CommandClient : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged)
 public:
     explicit CommandClient(QObject *parent = 0);
     ~CommandClient();
 
-signals:
+    bool connected() const;
 
 public slots:
-    void sendData();
-    void gotData();
+    void connectToServer(const QString& s);
+    void disconnectFromServer();
+
+    void refreshState();
 
 signals:
-    void connected();
+    void connectedChanged();
+
     void error();
+
     void gotState(const QList<SectionData>& data);
 
+private slots:
+    void gotData();
 
 private:
     QTcpSocket* m_pSock;
-
-    bool m_WaitingForHeader;
-    int m_BytesExpected;
-    QByteArray m_Data;
 };
 
 #endif // COMMANDCLIENT_H

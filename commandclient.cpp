@@ -6,19 +6,12 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-const int k_HeaderSize = 4;
-
-CommandClient::CommandClient(QObject *parent) : QObject(parent),
-    m_WaitingForHeader(true),
-    m_BytesExpected(k_HeaderSize)
+CommandClient::CommandClient(QObject *parent) : QObject(parent)
 {
     m_pSock = new QTcpSocket(this);
 
-    m_pSock->connectToHost("192.168.1.153", 7757);
-
     connect(m_pSock, SIGNAL(readyRead()), this, SLOT(gotData()));
-
-    QTimer::singleShot(2000, this, SLOT(sendData()));
+    connect(m_pSock, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SIGNAL(connectedChanged()));
 }
 
 CommandClient::~CommandClient()
@@ -26,8 +19,29 @@ CommandClient::~CommandClient()
 
 }
 
-void CommandClient::sendData()
+bool CommandClient::connected() const
 {
+    return (m_pSock->state()==QAbstractSocket::ConnectedState);
+}
+
+void CommandClient::connectToServer(const QString &s)
+{
+    m_pSock->connectToHost(s, 7757);
+}
+
+void CommandClient::disconnectFromServer()
+{
+    m_pSock->disconnectFromHost();
+}
+
+void CommandClient::refreshState()
+{
+    emit gotState(QList<SectionData>());
+    if (m_pSock->state()!=QAbstractSocket::ConnectedState)
+    {
+        return;
+    }
+
     QJsonDocument cmdDoc;
     QJsonObject cmdObj;
 
@@ -37,7 +51,6 @@ void CommandClient::sendData()
 
     QDataStream out(m_pSock);
     out.writeBytes(outBin.data(), outBin.length());
-    QTimer::singleShot(2000, this, SLOT(sendData()));
 }
 
 void CommandClient::gotData()

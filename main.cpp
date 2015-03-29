@@ -2,23 +2,18 @@
 #include <QQmlApplicationEngine>
 #include <QtQml>
 
-#include "remoteping.h"
+#include "controller.h"
 #include "linestatemodel.h"
-
-#include "commandclient.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    qmlRegisterType<LineStateModel>("com.elmsoft.qmlcomponents", 1, 0, "LineStateModel");
+    qmlRegisterType<Controller>("com.elmsoft.qmlcomponents", 1, 0, "Controller");
+    qmlRegisterUncreatableType<LineStateModel>("com.elmsoft.qmlcomponents", 1, 0, "LineStateModel", "Cannot create type");
 
     QQmlApplicationEngine engine;
-    //engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-
-
-    //RemotePing pinger;
-    CommandClient c;
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return app.exec();
 }

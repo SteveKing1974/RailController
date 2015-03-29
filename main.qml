@@ -13,9 +13,100 @@ ApplicationWindow {
     height: 480
     visible: true
 
-    LineStateModel {
-        id: lineModel
+//    LineStateModel {
+//        id: lineModel
+//    }
+    Controller {
+        id: controller
     }
+
+    MouseArea {
+        id: selectServerDlg
+
+        anchors.fill: parent
+
+        onClicked: selectControllerDlg.visible = false
+
+        visible: !controller.connected
+
+        z: 2
+
+        Rectangle {
+            color: "black"
+            opacity: 0.5
+            anchors.fill: parent
+        }
+
+        onVisibleChanged: {
+            if (!visible)
+            {
+                popupContent.modelIndex = -1
+                popupContent.v = []
+            }
+        }
+
+        function selectController(sectionIndex, possibleControllers)
+        {
+            popupContent.modelIndex = sectionIndex
+            popupContent.v = possibleControllers
+            visible = true
+        }
+
+        function refreshDisplay()
+        {
+            trackDisplay.requestPaint()
+        }
+
+
+        Rectangle {
+            id: clientsRect
+
+            anchors.centerIn: parent
+
+            color: "white"
+            width: 200
+            height: 200
+
+            border.color: "black"
+            border.width: 4
+            radius: 10
+
+            ListView {
+
+                anchors.fill: parent
+                anchors.margins: 30
+
+                property variant v: []
+                property int modelIndex: -1
+
+                header: Text {
+                    text: "Refresh"
+                    height: 30
+                    color: "black"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            controller.refreshClients()
+                        }
+                    }
+                }
+
+                model: controller.serverModel
+                delegate: Text {
+                    text: ipAddress
+                    height: 30
+                    color: "black"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            controller.connectToServer(ipAddress)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     property int baseLength: 200
 
@@ -56,20 +147,20 @@ ApplicationWindow {
 
             // Outer line
             context.beginPath();
-            context.strokeStyle = lineModel.sectionColour(0);
+            context.strokeStyle = controller.lineModel.sectionColour(0);
             context.arc(width/2 - baseLength, height/2, 180, Math.PI/2, -Math.PI/2, false)
             context.arc(width/2 + baseLength, height/2, 180, -Math.PI/2, Math.PI/2, false)
             context.stroke();
 
             context.beginPath()
-            context.strokeStyle = lineModel.sectionColour(1)
+            context.strokeStyle = controller.lineModel.sectionColour(1)
             context.moveTo(width/2 + baseLength, height/2 + 180)
             context.lineTo(width/2 - baseLength, height/2 + 180)
             context.stroke();
 
             // Inner line
             context.beginPath();
-            context.strokeStyle = lineModel.sectionColour(2)
+            context.strokeStyle = controller.lineModel.sectionColour(2)
 
             context.arc(width/2 - baseLength, height/2, 150, Math.PI/2, -Math.PI/2, false)
             context.arc(width/2 + baseLength, height/2, 150, -Math.PI/2, Math.PI/2, false)
@@ -80,14 +171,14 @@ ApplicationWindow {
             context.stroke();
 
             context.beginPath()
-            context.strokeStyle = lineModel.sectionColour(3)
+            context.strokeStyle = controller.lineModel.sectionColour(3)
             context.moveTo(width/2 + baseLength - 30, height/2 + 150)
             context.lineTo(width/2 - baseLength + 30, height/2 + 150)
             context.stroke()
 
             // RH Outer points
             context.beginPath();
-            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
+            context.strokeStyle = controller.lineModel.controllerColour(LineStateModel.eNoController)
 
             context.moveTo(width/2 + baseLength - 30, height/2 + 150)
             context.lineTo(width/2 + baseLength, height/2 + 180)
@@ -95,7 +186,7 @@ ApplicationWindow {
 
             // LH Outer points
             context.beginPath();
-            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
+            context.strokeStyle = controller.lineModel.controllerColour(LineStateModel.eNoController)
 
             context.moveTo(width/2 - baseLength + 30, height/2 + 150)
             context.lineTo(width/2 - baseLength, height/2 + 180)
@@ -103,7 +194,7 @@ ApplicationWindow {
 
             // Station outer points
             context.beginPath();
-            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
+            context.strokeStyle = controller.lineModel.controllerColour(LineStateModel.eNoController)
             context.moveTo(width/2 + baseLength - 30, height/2 + 150)
             context.lineTo(width/2 + baseLength - 60, height/2 + 120)
             context.stroke()
@@ -111,14 +202,14 @@ ApplicationWindow {
 
             // Station outer
             context.beginPath();
-            context.strokeStyle = lineModel.sectionColour(4)
+            context.strokeStyle = controller.lineModel.sectionColour(4)
             context.moveTo(width/2 + baseLength - 60, height/2 + 120)
             context.lineTo(width/2 - baseLength, height/2 + 120)
             context.stroke()
 
             // Run around
             context.beginPath();
-            context.strokeStyle = lineModel.sectionColour(5)
+            context.strokeStyle = controller.lineModel.sectionColour(5)
             context.moveTo(width/2 - baseLength, height/2 + 120)
             context.lineTo(width/2 - baseLength - 60, height/2 + 120)
             context.stroke();
@@ -126,61 +217,61 @@ ApplicationWindow {
 
             // Station inner entry/exit points
             context.beginPath();
-            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
+            context.strokeStyle = controller.lineModel.controllerColour(LineStateModel.eNoController)
             context.moveTo(width/2 + baseLength - 60, height/2 + 120)
             context.lineTo(width/2 + baseLength - 90, height/2 + 90)
             context.stroke()
             context.beginPath();
-            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
+            context.strokeStyle = controller.lineModel.controllerColour(LineStateModel.eNoController)
             context.moveTo(width/2 - baseLength+30, height/2 + 90)
             context.lineTo(width/2 - baseLength, height/2 + 120)
             context.stroke()
 
             // Station inner
             context.beginPath();
-            context.strokeStyle = lineModel.sectionColour(6)
+            context.strokeStyle = controller.lineModel.sectionColour(6)
             context.moveTo(width/2 + baseLength - 90, height/2 + 90)
             context.lineTo(width/2 - baseLength + 10, height/2 + 90)
             context.stroke();
 
             // LH Sidings entry points
             context.beginPath();
-            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
+            context.strokeStyle = controller.lineModel.controllerColour(LineStateModel.eNoController)
             context.moveTo(width/2 - baseLength + 10, height/2 + 90)
             context.lineTo(width/2 - baseLength - 50, height/2 + 30)
             context.stroke()
 
             // LH Sidings bottom
             context.beginPath();
-            context.strokeStyle = lineModel.sectionColour(7)
+            context.strokeStyle = controller.lineModel.sectionColour(7)
             context.moveTo(width/2 - baseLength + 10, height/2 + 90)
             context.lineTo(width/2 - baseLength - 90, height/2 + 90)
             context.stroke()
 
             // LH Sidings middle
             context.beginPath();
-            context.strokeStyle = lineModel.sectionColour(8)
+            context.strokeStyle = controller.lineModel.sectionColour(8)
             context.moveTo(width/2 - baseLength - 20, height/2 + 60)
             context.lineTo(width/2 - baseLength - 90, height/2 + 60)
             context.stroke()
 
             // LH Sidings top
             context.beginPath();
-            context.strokeStyle = lineModel.sectionColour(9)
+            context.strokeStyle = controller.lineModel.sectionColour(9)
             context.moveTo(width/2 - baseLength - 50, height/2 + 30)
             context.lineTo(width/2 - baseLength - 90, height/2 + 30)
             context.stroke()
 
             // RH Station loading
             context.beginPath();
-            context.strokeStyle = lineModel.sectionColour(10)
+            context.strokeStyle = controller.lineModel.sectionColour(10)
             context.moveTo(width/2 + baseLength - 90, height/2 + 90)
             context.lineTo(width/2 + baseLength - 30, height/2 + 90)
             context.stroke()
 
             // RH Sidings entry points
             context.beginPath();
-            context.strokeStyle = lineModel.controllerColour(lineModel.eNoController)
+            context.strokeStyle = controller.lineModel.controllerColour(LineStateModel.eNoController)
             context.moveTo(width/2 + baseLength - 60, height/2 + 120)
             context.lineTo(width/2 + baseLength - 30, height/2 + 120)
             context.lineTo(width/2 + baseLength + 30, height/2 + 60)
@@ -188,21 +279,21 @@ ApplicationWindow {
 
             // RH Sidings lower
             context.beginPath();
-            context.strokeStyle = lineModel.sectionColour(11)
+            context.strokeStyle = controller.lineModel.sectionColour(11)
             context.moveTo(width/2 + baseLength - 30, height/2 + 120)
             context.lineTo(width/2 + baseLength + 60, height/2 + 120)
             context.stroke()
 
             // RH Sidings middle
             context.beginPath();
-            context.strokeStyle = lineModel.sectionColour(12)
+            context.strokeStyle = controller.lineModel.sectionColour(12)
             context.moveTo(width/2 + baseLength , height/2 + 90)
             context.lineTo(width/2 + baseLength + 70, height/2 + 90)
             context.stroke()
 
             // RH Sidings upper
             context.beginPath();
-            context.strokeStyle = lineModel.sectionColour(13)
+            context.strokeStyle = controller.lineModel.sectionColour(13)
             context.moveTo(width/2 + baseLength + 30, height/2 + 60)
             context.lineTo(width/2 + baseLength + 80, height/2 + 60)
             context.stroke()
@@ -271,13 +362,13 @@ ApplicationWindow {
 
                 model: v
                 delegate: Text {
-                    text: lineModel.controllerName(popupContent.v[index])
+                    text: controller.lineModel.controllerName(popupContent.v[index])
                     height: 30
                     color: "black"
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            lineModel.changeController(popupContent.modelIndex, popupContent.v[index])
+                            controller.lineModel.changeController(popupContent.modelIndex, popupContent.v[index])
                             selectControllerDlg.refreshDisplay()
                             selectControllerDlg.visible = false
                         }
@@ -289,13 +380,13 @@ ApplicationWindow {
 
     // Click points
     Repeater {
-        model: lineModel
+        model: controller.lineModel
         Rectangle {
             x: clickBoxes[index][0]
             y: clickBoxes[index][1]
             width: 20
             height: 20
-            color: lineModel.controllerColour(controllerID)
+            color: controller.lineModel.controllerColour(controllerID)
 
             radius: 10
 

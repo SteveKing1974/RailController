@@ -4,7 +4,7 @@
 #include <QUdpSocket>
 #include <QTimer>
 
-RemotePing::RemotePing() : QObject(0)
+RemotePing::RemotePing(QObject *parent) : QObject(parent)
 {
     m_Pinger = new QUdpSocket(this);
     m_Receiver = new QUdpSocket(this);

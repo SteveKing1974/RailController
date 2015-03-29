@@ -28,7 +28,7 @@ public:
         eController3
     };
 
-    LineStateModel();
+    LineStateModel(QObject *parent = 0);
     ~LineStateModel();
 
     int rowCount(const QModelIndex &parent) const;
@@ -43,6 +43,7 @@ public:
 
 public slots:
     void changeController(int sectionIndex, int controllerId);
+    void stateChanged(const QList<SectionData> data);
 
 private:
 

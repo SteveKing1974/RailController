@@ -6,7 +6,9 @@ SOURCES += main.cpp \
     remoteping.cpp \
     linestatemodel.cpp \
     commandclient.cpp \
-    sectiondata.cpp
+    sectiondata.cpp \
+    controller.cpp \
+    servermodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -20,4 +22,6 @@ HEADERS += \
     remoteping.h \
     linestatemodel.h \
     commandclient.h \
-    sectiondata.h
+    sectiondata.h \
+    controller.h \
+    servermodel.h

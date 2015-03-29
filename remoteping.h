@@ -11,16 +11,17 @@ class RemotePing : public QObject
     Q_OBJECT
 
 public:
-    RemotePing();
+    RemotePing(QObject* parent = 0);
     ~RemotePing();
-    void init();
 
 signals:
     void remoteIdentify(const QHostAddress& remote);
 
+public slots:
+    void sendPing();
+
 private slots:
     void readPendingDatagrams();
-    void sendPing();
 
 private:
     QUdpSocket* m_Pinger;
