@@ -45,6 +45,9 @@ public slots:
     void changeController(int sectionIndex, int controllerId);
     void stateChanged(const QList<SectionData> data);
 
+signals:
+    void modelChanged();
+
 private:
 
     QList<SectionData> m_Data;

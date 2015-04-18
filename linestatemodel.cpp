@@ -138,6 +138,7 @@ void LineStateModel::changeController(int sectionIndex, int controllerId)
 
     m_Data[sectionIndex].m_ControllerId = static_cast<LineStateModel::ControllerID>(controllerId);
     emit dataChanged(index(sectionIndex), index(sectionIndex));
+    emit modelChanged();
 }
 
 void LineStateModel::stateChanged(const QList<SectionData> data)
@@ -149,6 +150,8 @@ void LineStateModel::stateChanged(const QList<SectionData> data)
     beginInsertRows(QModelIndex(), 0, data.count()-1);
     m_Data = data;
     endInsertRows();
+
+    emit modelChanged();
 }
 
 

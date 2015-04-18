@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>ServerPopup.qml</file>
+        <file>TrackCanvas.qml</file>
+        <file>SelectControllerPopup.qml</file>
     </qresource>
 </RCC>
