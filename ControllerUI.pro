@@ -8,7 +8,10 @@ SOURCES += main.cpp \
     commandclient.cpp \
     sectiondata.cpp \
     controller.cpp \
-    servermodel.cpp
+    servermodel.cpp \
+    tracksection.cpp \
+    pointsection.cpp \
+    breaksection.cpp
 
 RESOURCES += qml.qrc
 
@@ -24,4 +27,7 @@ HEADERS += \
     commandclient.h \
     sectiondata.h \
     controller.h \
-    servermodel.h
+    servermodel.h \
+    tracksection.h \
+    pointsection.h \
+    breaksection.h
