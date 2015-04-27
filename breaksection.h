@@ -14,10 +14,10 @@ class BreakSection : public QObject
     Q_ENUMS(SwitchState)
 
 public:
-    enum {
+    enum SwitchState {
         eSwitchOpen,
         eSwitchClosed
-    } SwitchState;
+    };
 
     explicit BreakSection(TrackSection* pLeftBranch,
                           TrackSection* pRightBranch,
@@ -26,7 +26,7 @@ public:
 
 
 
-    void state() const { return m_SwitchState; }
+    SwitchState state() const { return m_SwitchState; }
 
     void setState(SwitchState newVal);
 
@@ -42,5 +42,6 @@ private:
     TrackSection* m_pLeft;
     TrackSection* m_pRight;
 };
+
 
 #endif // BREAKSECTION_H

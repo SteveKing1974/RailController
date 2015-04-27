@@ -9,15 +9,15 @@ class PointSection : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(SwitchDirection direction READ direction WRITE setDirection NOTIFY directionChaned)
+    Q_PROPERTY(SwitchDirection direction READ direction WRITE setDirection NOTIFY directionChanged)
 
     Q_ENUMS(SwitchDirection)
 
 public:
-    enum {
+    enum SwitchDirection {
         eSwitchLeft,
         eSwitchRight
-    } SwitchDirection;
+    };
 
     explicit PointSection(TrackSection* pCommon,
                           TrackSection* pLeftBranch,
@@ -25,7 +25,7 @@ public:
                           SwitchDirection defaultDirection = eSwitchLeft,
                           QObject *parent = 0);
 
-    void direction() const { return m_SwitchDirection; }
+    SwitchDirection direction() const { return m_SwitchDirection; }
 
     void setDirection(SwitchDirection newVal);
 
@@ -35,7 +35,7 @@ signals:
 public slots:
 
 private:
-    void confirgureDirection();
+    void configureDirection();
 
     SwitchDirection m_SwitchDirection;
     TrackSection* m_pCommon;

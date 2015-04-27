@@ -7,14 +7,14 @@ class TrackSection : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(TYPE int READ leftVolatge NOTIFY leftVoltageChanged)
-    Q_PROPERTY(TYPE int READ rightVolatge NOTIFY rightVoltageChanged)
+    Q_PROPERTY(int leftVoltage READ leftVoltage NOTIFY leftVoltageChanged)
+    Q_PROPERTY(int rightVoltage READ rightVoltage NOTIFY rightVoltageChanged)
 
 public:
-    enum {
+    enum Side {
         eLeft  = 0x1,
         eRight = 0x2
-    } Side;
+    };
 
     Q_DECLARE_FLAGS(Sides, Side)
 
@@ -39,5 +39,7 @@ private:
     int m_RightVoltage;
 
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(TrackSection::Sides)
 
 #endif // TRACKSECTION_H

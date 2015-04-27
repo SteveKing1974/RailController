@@ -5,17 +5,17 @@ PointSection::PointSection(TrackSection* pCommon,
                            TrackSection* pRightBranch,
                            SwitchDirection defaultDirection,
                            QObject *parent) :
+    QObject(parent),
+    m_SwitchDirection(defaultDirection),
     m_pCommon(pCommon),
     m_pLeft(pLeftBranch),
-    m_pRight(pRightBranch),
-    m_SwitchDirection(defaultDirection),
-    QObject(parent)
+    m_pRight(pRightBranch)
 {
     // Set up common connections
     pCommon->connectSection(pLeftBranch, TrackSection::eLeft);
     pCommon->connectSection(pRightBranch, TrackSection::eRight);
 
-    confirgureDirection();
+    configureDirection();
 }
 
 void PointSection::setDirection(SwitchDirection newVal)
@@ -29,7 +29,7 @@ void PointSection::setDirection(SwitchDirection newVal)
     }
 }
 
-void PointSection::confirgureDirection()
+void PointSection::configureDirection()
 {
     if (m_SwitchDirection==eSwitchLeft)
     {

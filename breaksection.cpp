@@ -4,10 +4,10 @@ BreakSection::BreakSection(TrackSection* pLeft,
                            TrackSection* pRight,
                            SwitchState defaultState,
                            QObject *parent) :
-    m_pLeft(pLeft),
-    m_pRight(pRight),
+    QObject(parent),
     m_SwitchState(defaultState),
-    QObject(parent)
+    m_pLeft(pLeft),
+    m_pRight(pRight)
 {
     configureState();
 }
