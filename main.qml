@@ -15,115 +15,119 @@ ApplicationWindow {
 
     property int baseLength: 200
 
-
-    property variant clickBoxes: [
-        [topLevel.width/2 - 10, topLevel.height/2 - 190],
-        [topLevel.width/2 - 10, topLevel.height/2+170],
-        [topLevel.width/2 - 10, topLevel.height/2-160],
-        [topLevel.width/2 - 10, topLevel.height/2+140],
-        [topLevel.width/2 - 10, topLevel.height/2+110],
-        [topLevel.width/2 - baseLength - 40, topLevel.height/2+110],
-        [topLevel.width/2 - 10, topLevel.height/2+80],
-
-        [topLevel.width/2 - baseLength - 70, topLevel.height/2+80],
-        [topLevel.width/2 - baseLength - 75, topLevel.height/2+50],
-        [topLevel.width/2 - baseLength - 80, topLevel.height/2+20],
-
-        [topLevel.width/2 + baseLength - 60, topLevel.height/2+80],
-
-        [topLevel.width/2 + baseLength + 20, topLevel.height/2+110],
-        [topLevel.width/2 + baseLength + 30, topLevel.height/2+80],
-        [topLevel.width/2 + baseLength + 40, topLevel.height/2+50],
-    ]
-
-
-    Controller {
-        id: controller
+    TrackSectionItem {
+        width: 200
+        height: 200
     }
 
+//    property variant clickBoxes: [
+//        [topLevel.width/2 - 10, topLevel.height/2 - 190],
+//        [topLevel.width/2 - 10, topLevel.height/2+170],
+//        [topLevel.width/2 - 10, topLevel.height/2-160],
+//        [topLevel.width/2 - 10, topLevel.height/2+140],
+//        [topLevel.width/2 - 10, topLevel.height/2+110],
+//        [topLevel.width/2 - baseLength - 40, topLevel.height/2+110],
+//        [topLevel.width/2 - 10, topLevel.height/2+80],
 
-    ServerPopup {
-        visible: !controller.connected
-        controllerObj: controller
-    }
+//        [topLevel.width/2 - baseLength - 70, topLevel.height/2+80],
+//        [topLevel.width/2 - baseLength - 75, topLevel.height/2+50],
+//        [topLevel.width/2 - baseLength - 80, topLevel.height/2+20],
 
+//        [topLevel.width/2 + baseLength - 60, topLevel.height/2+80],
 
-
-    TrackCanvas {
-        id: trackDisplay
-        lineModel: controller.lineModel
-    }
-
-    SelectControllerPopup
-    {
-        id: selectControllerDlg
-
-        lineModel: controller.lineModel
-
-        anchors.fill: parent
-
-        visible: false
-    }
+//        [topLevel.width/2 + baseLength + 20, topLevel.height/2+110],
+//        [topLevel.width/2 + baseLength + 30, topLevel.height/2+80],
+//        [topLevel.width/2 + baseLength + 40, topLevel.height/2+50],
+//    ]
 
 
-    // Refresh and send data
-    Column {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        MouseArea {
-            width: 100
-            height: 50
+//    Controller {
+//        id: controller
+//    }
 
-            Rectangle {
-                border.color: "black"
-                radius: 5
-                anchors.fill: parent
 
-                Text {
-                    text: "Refresh"
-                    anchors.centerIn: parent
-                }
-            }
+//    ServerPopup {
+//        visible: !controller.connected
+//        controllerObj: controller
+//    }
 
-            onClicked: controller.refreshState()
-        }
-        MouseArea {
-            width: 100
-            height: 50
 
-            Rectangle {
-                border.color: "black"
-                color: parent.pressed ? "black" : "white"
-                radius: 5
-                anchors.fill: parent
 
-                Text {
-                    text: "Submit"
-                    anchors.centerIn: parent
-                }
-            }
+//    TrackCanvas {
+//        id: trackDisplay
+//        lineModel: controller.lineModel
+//    }
 
-            onClicked: controller.refreshState()
-        }
-    }
+//    SelectControllerPopup
+//    {
+//        id: selectControllerDlg
 
-    // Click points
-    Repeater {
-        model: controller.lineModel
-        Rectangle {
-            x: clickBoxes[index][0]
-            y: clickBoxes[index][1]
-            width: 20
-            height: 20
-            color: controller.lineModel.controllerColour(controllerID)
+//        lineModel: controller.lineModel
 
-            radius: 10
+//        anchors.fill: parent
 
-            MouseArea{
-                anchors.fill: parent
-                onClicked: selectControllerDlg.selectController(index, possibleControllers)
-            }
-        }
-    }
+//        visible: false
+//    }
+
+
+//    // Refresh and send data
+//    Column {
+//        anchors.top: parent.top
+//        anchors.left: parent.left
+//        MouseArea {
+//            width: 100
+//            height: 50
+
+//            Rectangle {
+//                border.color: "black"
+//                radius: 5
+//                anchors.fill: parent
+
+//                Text {
+//                    text: "Refresh"
+//                    anchors.centerIn: parent
+//                }
+//            }
+
+//            onClicked: controller.refreshState()
+//        }
+//        MouseArea {
+//            width: 100
+//            height: 50
+
+//            Rectangle {
+//                border.color: "black"
+//                color: parent.pressed ? "black" : "white"
+//                radius: 5
+//                anchors.fill: parent
+
+//                Text {
+//                    text: "Submit"
+//                    anchors.centerIn: parent
+//                }
+//            }
+
+//            onClicked: controller.refreshState()
+//        }
+//    }
+
+//    // Click points
+//    Repeater {
+//        model: controller.lineModel
+//        Rectangle {
+//            x: clickBoxes[index][0]
+//            y: clickBoxes[index][1]
+//            width: 20
+//            height: 20
+//            color: controller.lineModel.controllerColour(controllerID)
+
+//            radius: 10
+
+//            MouseArea{
+//                anchors.fill: parent
+//                onClicked: selectControllerDlg.selectController(index, possibleControllers)
+//            }
+//        }
+//    }
 
 }

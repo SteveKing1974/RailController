@@ -3,7 +3,7 @@
 
 #include <QQuickItem>
 
-#include "tracksection.h"
+class TrackSection;
 
 class TrackSectionItem : public QQuickItem
 {
@@ -23,6 +23,7 @@ protected:
     QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *);
 
 private:
+    QColor voltageToColor(int voltage) const;
     TrackSection* m_pSection;
 };
 
