@@ -5,6 +5,7 @@
 #include "controller.h"
 #include "linestatemodel.h"
 #include "tracksectionitem.h"
+#include "breaksectionitem.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +15,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<LineStateModel>("com.elmsoft.qmlcomponents", 1, 0, "LineStateModel", "Cannot create type");
 
     qmlRegisterType<TrackSectionItem>("com.elmsoft.qmlcomponents", 1, 0, "TrackSectionItem");
+    qmlRegisterType<BreakSectionItem>("com.elmsoft.qmlcomponents", 1, 0, "BreakSectionItem");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

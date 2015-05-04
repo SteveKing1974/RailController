@@ -38,6 +38,7 @@ QColor TrackSectionItem::voltageToColor(int voltage) const
 {
     switch (voltage)
     {
+    case -1: return Qt::black;
     case 0: return Qt::black;
     case 1: return Qt::red;
     case 2: return Qt::blue;

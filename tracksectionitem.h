@@ -3,7 +3,7 @@
 
 #include <QQuickItem>
 
-class TrackSection;
+#include "tracksection.h"
 
 class TrackSectionItem : public QQuickItem
 {
@@ -14,7 +14,7 @@ class TrackSectionItem : public QQuickItem
 public:
     explicit TrackSectionItem(QQuickItem *parent = 0);
 
-    QObject* section() const { return m_pSection; }
+    QObject* section() { return m_pSection; }
 signals:
 
 public slots:
