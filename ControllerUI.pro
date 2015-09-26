@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     pointsection.cpp \
     breaksection.cpp \
     tracksectionitem.cpp \
-    breaksectionitem.cpp
+    breaksectionitem.cpp \
+    pointsectionitem.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,4 +35,5 @@ HEADERS += \
     pointsection.h \
     breaksection.h \
     tracksectionitem.h \
-    breaksectionitem.h
+    breaksectionitem.h \
+    pointsectionitem.h

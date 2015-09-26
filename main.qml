@@ -26,6 +26,14 @@ ApplicationWindow {
         y:200
         width: 200
         height: 200
+        enabled: false
+    }
+
+    PointSectionItem {
+        x:400
+        width: 200
+        height: 200
+        enabled: false
     }
 
     //    property variant clickBoxes: [

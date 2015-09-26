@@ -28,7 +28,7 @@ QSGNode *TrackSectionItem::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
 
     n = static_cast<QSGSimpleRectNode *>(node->childAtIndex(1));
     n->setRect(0, 2*height()/3, width(), 3);
-    n->setColor(m_pSection->rightVoltage());
+    n->setColor(voltageToColor(m_pSection->rightVoltage()));
 
 
     return node;

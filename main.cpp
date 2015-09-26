@@ -6,6 +6,7 @@
 #include "linestatemodel.h"
 #include "tracksectionitem.h"
 #include "breaksectionitem.h"
+#include "pointsectionitem.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<TrackSectionItem>("com.elmsoft.qmlcomponents", 1, 0, "TrackSectionItem");
     qmlRegisterType<BreakSectionItem>("com.elmsoft.qmlcomponents", 1, 0, "BreakSectionItem");
+    qmlRegisterType<PointSectionItem>("com.elmsoft.qmlcomponents", 1, 0, "PointSectionItem");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
