@@ -15,21 +15,36 @@ ApplicationWindow {
 
     property int baseLength: 200
 
+    Component.onCompleted: {
+        print("Left is ", leftTrack.section, "Right is",  breakSection.leftSection, breakSection.rightSection)
+        leftTrack.section.connectSection(breakSection.leftSection, 3)
+        //breakSection.rightSection.connectSection(pointSection.commonSection, 3)
+        leftTrack.section.setLeftVoltage(2)
+        leftTrack.section.setRightVoltage(1)
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: breakSection.enabled = !breakSection.enabled
+    }
+
     TrackSectionItem {
-        y: 0
+        id: leftTrack
         width: 200
         height: 200
     }
 
 
     BreakSectionItem {
-        y:200
+        id: breakSection
+        anchors.left: leftTrack.right
         width: 200
         height: 200
         enabled: false
     }
 
     PointSectionItem {
+        id: pointSection
         x:400
         width: 200
         height: 200

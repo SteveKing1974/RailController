@@ -4,6 +4,7 @@
 #include <QQuickItem>
 
 class BreakSection;
+class TrackSection;
 
 class BreakSectionItem : public QQuickItem
 {
@@ -20,8 +21,8 @@ public:
     QObject* leftSection() const;
     QObject* rightSection() const;
 
-    void setLeftSection(QObject* pSec);
-    void setRightSection(QObject* pSec);
+    void setLeftSection(QObject* pArg);
+    void setRightSection(QObject* pArg);
 
     bool enabled() const;
     void setEnabled(bool newVal);
@@ -42,8 +43,8 @@ private:
     bool m_Enabled;
     BreakSection* m_pBreakSection;
 
-    QObject* m_pLeft;
-    QObject* m_pRight;
+    TrackSection* m_pLeft;
+    TrackSection* m_pRight;
 };
 
 #endif // BREAKSECTIONITEM_H

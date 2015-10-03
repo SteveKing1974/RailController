@@ -22,9 +22,9 @@ public:
     QObject* rightSection() const;
     QObject* commonSection() const;
 
-    void setLeftSection(QObject* pSec);
-    void setRightSection(QObject* pSec);
-    void setCommonSection(QObject* pSec);
+    void setLeftSection(QObject* pArg);
+    void setRightSection(QObject* pArg);
+    void setCommonSection(QObject* pArg);
 
     bool direction() const;
     void setDirection(int newVal);

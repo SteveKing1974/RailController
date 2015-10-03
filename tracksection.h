@@ -2,6 +2,7 @@
 #define TRACKSECTION_H
 
 #include <QObject>
+#include <QColor>
 
 class TrackSection : public QObject
 {
@@ -10,6 +11,8 @@ class TrackSection : public QObject
     Q_PROPERTY(int leftVoltage READ leftVoltage NOTIFY leftVoltageChanged)
     Q_PROPERTY(int rightVoltage READ rightVoltage NOTIFY rightVoltageChanged)
 
+    Q_ENUMS(Side)
+    Q_ENUMS(Sides)
 public:
     enum Side {
         eLeft  = 0x1,
@@ -23,8 +26,10 @@ public:
     int leftVoltage() const { return m_LeftVoltage; }
     int rightVoltage() const { return m_RightVoltage; }
 
-    void connectSection(TrackSection* pSec, Sides s);
-    void disconnectSection(TrackSection* pSec, Sides s);
+    Q_INVOKABLE void connectSection(TrackSection* pSec, int arg);
+    Q_INVOKABLE void disconnectSection(TrackSection* pSec, int arg);
+
+    static  QColor voltageToColor(int voltage);
 
 signals:
     void leftVoltageChanged(int val);

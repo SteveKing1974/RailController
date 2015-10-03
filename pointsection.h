@@ -31,6 +31,7 @@ public:
 
 signals:
     void directionChanged();
+    void voltageChanged();
 
 public slots:
 

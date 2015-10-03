@@ -12,8 +12,13 @@ PointSectionItem::PointSectionItem(QQuickItem *parent) :
     m_Direction(PointSection::eSwitchLeft),
     m_pPointSection(0),
     m_pLeft(0),
-    m_pRight(0)
+    m_pRight(0),
+    m_pCommon(0)
 {
+    setLeftSection(new TrackSection(this));
+    setRightSection(new TrackSection(this));
+    setCommonSection(new TrackSection(this));
+
     setFlag(QQuickItem::ItemHasContents);
 }
 
@@ -32,8 +37,9 @@ QObject *PointSectionItem::commonSection() const
     return m_pCommon;
 }
 
-void PointSectionItem::setLeftSection(QObject *pSec)
+void PointSectionItem::setLeftSection(QObject *pArg)
 {
+    TrackSection* pSec = qobject_cast<TrackSection*>(pArg);
     if (pSec != m_pLeft)
     {
         Q_ASSERT(m_pLeft==0);
@@ -43,8 +49,9 @@ void PointSectionItem::setLeftSection(QObject *pSec)
     }
 }
 
-void PointSectionItem::setRightSection(QObject *pSec)
+void PointSectionItem::setRightSection(QObject *pArg)
 {
+    TrackSection* pSec = qobject_cast<TrackSection*>(pArg);
     if (pSec != m_pRight)
     {
         Q_ASSERT(m_pRight==0);
@@ -54,8 +61,9 @@ void PointSectionItem::setRightSection(QObject *pSec)
     }
 }
 
-void PointSectionItem::setCommonSection(QObject *pSec)
+void PointSectionItem::setCommonSection(QObject *pArg)
 {
+    TrackSection* pSec = qobject_cast<TrackSection*>(pArg);
     if (pSec != m_pCommon)
     {
         Q_ASSERT(m_pCommon==0);
@@ -162,4 +170,6 @@ void PointSectionItem::createPoint()
                                        qobject_cast<TrackSection*>(m_pCommon),
                                        static_cast<PointSection::SwitchDirection>(m_Direction),
                                        this);
+
+     connect(m_pPointSection, SIGNAL(voltageChanged()), this, SLOT(update()));
 }

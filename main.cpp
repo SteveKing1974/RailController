@@ -7,6 +7,7 @@
 #include "tracksectionitem.h"
 #include "breaksectionitem.h"
 #include "pointsectionitem.h"
+#include "tracksection.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +15,8 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<Controller>("com.elmsoft.qmlcomponents", 1, 0, "Controller");
     qmlRegisterUncreatableType<LineStateModel>("com.elmsoft.qmlcomponents", 1, 0, "LineStateModel", "Cannot create type");
+
+    qmlRegisterUncreatableType<TrackSection>("com.elmsoft.qmlcomponents", 1, 0, "TrackSection", "Cannot create type");
 
     qmlRegisterType<TrackSectionItem>("com.elmsoft.qmlcomponents", 1, 0, "TrackSectionItem");
     qmlRegisterType<BreakSectionItem>("com.elmsoft.qmlcomponents", 1, 0, "BreakSectionItem");

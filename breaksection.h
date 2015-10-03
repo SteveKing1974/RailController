@@ -9,7 +9,7 @@ class BreakSection : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(SwitchState state READ state WRITE setState NOTIFY stateChaned)
+    Q_PROPERTY(SwitchState state READ state WRITE setState NOTIFY stateChanged)
 
     Q_ENUMS(SwitchState)
 
@@ -31,7 +31,8 @@ public:
     void setState(SwitchState newVal);
 
 signals:
-    void stateChaned();
+    void stateChanged();
+    void voltageChanged();
 
 public slots:
 

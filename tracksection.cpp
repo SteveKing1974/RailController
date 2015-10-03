@@ -1,4 +1,5 @@
 #include "tracksection.h"
+#include <QDebug>
 
 TrackSection::TrackSection(QObject *parent) :
     QObject(parent),
@@ -11,22 +12,43 @@ void TrackSection::setLeftVoltage(int val)
 {
     if (val != m_LeftVoltage)
     {
+        qDebug() << "Left voltage of" << this << "is" << val << "Current" << m_LeftVoltage;
         m_LeftVoltage  = val;
         emit leftVoltageChanged(val);
     }
 }
 
+
+
 void TrackSection::setRightVoltage(int val)
 {
     if (val != m_RightVoltage)
     {
+        qDebug() << "Right voltage of" << this << "is" << val;
         m_RightVoltage  = val;
         emit rightVoltageChanged(val);
     }
 }
 
-void TrackSection::connectSection(TrackSection* pSec, Sides s)
+
+QColor TrackSection::voltageToColor(int voltage)
 {
+    switch (voltage)
+    {
+    case -1: return Qt::black;
+    case 0: return Qt::black;
+    case 1: return Qt::red;
+    case 2: return Qt::blue;
+    case 3: return Qt::green;
+    default:
+        Q_ASSERT(0);
+        return Qt::gray;
+    }
+}
+
+void TrackSection::connectSection(TrackSection* pSec, int arg)
+{
+    const Sides s(arg);
     if (s.testFlag(eLeft))
     {
         connect(this, SIGNAL(leftVoltageChanged(int)), pSec, SLOT(setLeftVoltage(int)));
@@ -63,8 +85,9 @@ void TrackSection::connectSection(TrackSection* pSec, Sides s)
     }
 }
 
-void TrackSection::disconnectSection(TrackSection* pSec, Sides s)
+void TrackSection::disconnectSection(TrackSection* pSec, int arg)
 {
+    const Sides s(arg);
     if (s.testFlag(eLeft))
     {
         disconnect(this, SIGNAL(leftVoltageChanged(int)), pSec, SLOT(setLeftVoltage(int)));

@@ -10,6 +10,10 @@ BreakSection::BreakSection(TrackSection* pLeft,
     m_pRight(pRight)
 {
     configureState();
+    connect(m_pLeft, SIGNAL(leftVoltageChanged(int)), this, SIGNAL(voltageChanged()));
+    connect(m_pLeft, SIGNAL(rightVoltageChanged(int)), this, SIGNAL(voltageChanged()));
+    connect(m_pRight, SIGNAL(leftVoltageChanged(int)), this, SIGNAL(voltageChanged()));
+    connect(m_pRight, SIGNAL(rightVoltageChanged(int)), this, SIGNAL(voltageChanged()));
 }
 
 void BreakSection::setState(SwitchState newVal)
@@ -18,6 +22,7 @@ void BreakSection::setState(SwitchState newVal)
     {
         m_SwitchState = newVal;
         configureState();
+        emit stateChanged();
     }
 }
 

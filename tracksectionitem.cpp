@@ -8,6 +8,8 @@ TrackSectionItem::TrackSectionItem(QQuickItem *parent) :
     QQuickItem(parent),
     m_pSection(new TrackSection(this))
 {
+    connect(m_pSection, SIGNAL(leftVoltageChanged(int)), this, SLOT(update()));
+    connect(m_pSection, SIGNAL(rightVoltageChanged(int)), this, SLOT(update()));
     setFlag(QQuickItem::ItemHasContents);
 }
 
@@ -24,27 +26,13 @@ QSGNode *TrackSectionItem::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
 
     QSGSimpleRectNode *n = static_cast<QSGSimpleRectNode *>(node->childAtIndex(0));
     n->setRect(0, height()/3, width(), 3);
-    n->setColor(voltageToColor(m_pSection->leftVoltage()));
+    n->setColor( TrackSection::voltageToColor(m_pSection->leftVoltage()));
 
     n = static_cast<QSGSimpleRectNode *>(node->childAtIndex(1));
     n->setRect(0, 2*height()/3, width(), 3);
-    n->setColor(voltageToColor(m_pSection->rightVoltage()));
+    n->setColor( TrackSection::voltageToColor(m_pSection->rightVoltage()));
 
 
     return node;
 }
 
-QColor TrackSectionItem::voltageToColor(int voltage) const
-{
-    switch (voltage)
-    {
-    case -1: return Qt::black;
-    case 0: return Qt::black;
-    case 1: return Qt::red;
-    case 2: return Qt::blue;
-    case 3: return Qt::green;
-    default:
-        Q_ASSERT(0);
-        return Qt::gray;
-    }
-}
