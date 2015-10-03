@@ -114,6 +114,57 @@ void TrackSection::disconnectSection(TrackSection* pSec, int arg)
     }
 }
 
+void TrackSection::connectSectionReversed(TrackSection *pSec)
+{
+    connect(this, SIGNAL(leftVoltageChanged(int)), pSec, SLOT(setRightVoltage(int)));
+    connect(pSec, SIGNAL(rightVoltageChanged(int)), this, SLOT(setLeftVoltage(int)));
+
+    connect(this, SIGNAL(rightVoltageChanged(int)), pSec, SLOT(setLeftVoltage(int)));
+    connect(pSec, SIGNAL(leftVoltageChanged(int)), this, SLOT(setRightVoltage(int)));
+
+    if (m_LeftVoltage != pSec->rightVoltage())
+    {
+        if (m_LeftVoltage == -1)
+        {
+            setLeftVoltage(pSec->rightVoltage());
+        }
+        else
+        {
+            pSec->setRightVoltage(m_LeftVoltage);
+        }
+    }
+    if (m_RightVoltage != pSec->leftVoltage())
+    {
+        if (m_RightVoltage == -1)
+        {
+            setRightVoltage(pSec->leftVoltage());
+        }
+        else
+        {
+            pSec->setLeftVoltage(m_RightVoltage);
+        }
+    }
+    m_ConnectedToLeft.append(pSec);
+    m_ConnectedToRight.append(pSec);
+}
+
+void TrackSection::disconnectSectionReversed(TrackSection *pSec)
+{
+    disconnect(this, SIGNAL(leftVoltageChanged(int)), pSec, SLOT(setRightVoltage(int)));
+    disconnect(pSec, SIGNAL(rightVoltageChanged(int)), this, SLOT(setLeftVoltage(int)));
+
+    disconnect(this, SIGNAL(rightVoltageChanged(int)), pSec, SLOT(setLeftVoltage(int)));
+    disconnect(pSec, SIGNAL(leftVoltageChanged(int)), this, SLOT(setRightVoltage(int)));
+
+    setRightVoltage(-1);
+    pSec->setRightVoltage(-1);
+    setLeftVoltage(-1);
+    pSec->setLeftVoltage(-1);
+
+    m_ConnectedToLeft.removeOne(pSec);
+    m_ConnectedToRight.removeOne(pSec);
+}
+
 void TrackSection::showConnections() const
 {
     qDebug() << "Connected to (left)" << m_ConnectedToLeft;

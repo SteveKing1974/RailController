@@ -13,14 +13,39 @@ ApplicationWindow {
     height: 480
     visible: true
 
-    property int baseLength: 200
+    property int trackHeight: 50
 
     Component.onCompleted: {
-        leftTrack.section.connectSection(breakSection.leftSection, 3)
-        breakSection.rightSection.connectSection(pointSection.commonSection, 3)
+        outerTrackLeft.section.connectSection(outerSwitchLeft.commonSection, 3)
+        outerTrackLeft.section.connectSection(outerTrackRight.section, 3)
+        outerSwitchLeft.rightSection.connectSection(outerTrackMiddle.section, 3)
+        outerTrackMiddle.section.connectSection(outerSwitchRight.rightSection, 3)
+        outerSwitchRight.commonSection.connectSection(outerTrackRight.section, 3)
+
+        innerTrackLeft.section.connectSectionReversed(innerSwitchLeft.rightSection)
+        innerTrackLeft.section.connectSection(innerTrackRight.section, 3)
+        innerSwitchLeft.commonSection.connectSectionReversed(innerTrackMiddle.section, 3)
+        innerTrackMiddle.section.connectSection(innerStationSwitch.rightSection, 3)
+        innerStationSwitch.commonSection.connectSectionReversed(innerSwitchRight.commonSection, 3)
+        innerSwitchRight.rightSection.connectSectionReversed(innerTrackRight.section, 3)
+
+        outerSwitchLeft.leftSection.connectSectionReversed(innerSwitchLeft.leftSection, 3)
+        outerSwitchRight.leftSection.connectSectionReversed(innerSwitchRight.leftSection, 3)
     }
 
+    Rectangle {
+        id: powerSupply2
+        x: 20
+        width: 20
+        height: 20
+        color: "blue"
 
+        PowerSupply {
+            leftVoltage: 3
+            rightVoltage: 0
+            connectedSection: innerTrackLeft.section
+        }
+    }
 
     Rectangle {
         id: powerSupply
@@ -30,152 +55,172 @@ ApplicationWindow {
 
         PowerSupply {
             leftVoltage: 2
-            rightVoltage: 1
-            connectedSection: leftTrack.section
+            rightVoltage: 0
+            connectedSection: outerTrackLeft.section
         }
     }
 
-    TrackSectionItem {
-        id: leftTrack
-        width: 200
-        height: 200
-    }
+    Rectangle {
+        id: outerTrackSection
 
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 40
+        anchors.left: parent.left
+        anchors.right: parent.right
 
-    BreakSectionItem {
-        id: breakSection
-        anchors.left: leftTrack.right
-        width: 200
-        height: 200
-        enabled: false
+        height: trackHeight
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: breakSection.enabled = !breakSection.enabled
+        TrackSectionItem {
+            id: outerTrackLeft
+
+            width: 50
+
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+        }
+
+        PointSectionItem {
+            id: outerSwitchLeft
+
+            anchors.left: outerTrackLeft.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            width: 100
+            direction: 1
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: outerSwitchLeft.direction = !outerSwitchLeft.direction
+            }
+        }
+
+        TrackSectionItem {
+            id: outerTrackMiddle
+
+            anchors.left: outerSwitchLeft.right
+            anchors.right: outerSwitchRight.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+        }
+
+        PointSectionItem {
+            id: outerSwitchRight
+
+            anchors.right: outerTrackRight.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            direction: 1
+            width: 100
+
+            transform: Rotation { origin.x: outerSwitchRight.width/2; axis { x: 0; y: 1; z: 0 } angle: 180 }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: outerSwitchRight.direction = !outerSwitchRight.direction
+            }
+        }
+
+        TrackSectionItem {
+            id: outerTrackRight
+
+            width: 50
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
         }
     }
 
-    PointSectionItem {
-        id: pointSection
-        anchors.left: breakSection.right
-        width: 200
-        height: 200
-        direction: 0
+    Rectangle {
+        id: innerTrackSection
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: pointSection.direction = !pointSection.direction
+        anchors.bottom: outerTrackSection.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        height: trackHeight
+
+        TrackSectionItem {
+            id: innerTrackLeft
+
+            width: 50
+
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+        }
+
+        PointSectionItem {
+            id: innerSwitchLeft
+
+            anchors.left: innerTrackLeft.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+
+            width: 100
+            direction: 1
+
+            rotation: 180
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: innerSwitchLeft.direction = !innerSwitchLeft.direction
+            }
+        }
+
+        TrackSectionItem {
+            id: innerTrackMiddle
+
+            anchors.left: innerSwitchLeft.right
+            anchors.right: innerStationSwitch.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+        }
+
+        PointSectionItem {
+            id: innerStationSwitch
+
+            anchors.right: innerSwitchRight.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            direction: 1
+            width: 100
+
+            transform: Rotation { origin.x: innerSwitchRight.width/2; axis { x: 0; y: 1; z: 0 } angle: 180 }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: innerStationSwitch.direction = !innerStationSwitch.direction
+            }
+        }
+
+        PointSectionItem {
+            id: innerSwitchRight
+
+            anchors.right: innerTrackRight.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            direction: 1
+            width: 100
+
+            rotation: 180
+
+            transform: Rotation { origin.x: innerSwitchRight.width/2; axis { x: 0; y: 1; z: 0 } angle: 180 }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: innerSwitchRight.direction = !innerSwitchRight.direction
+            }
+        }
+
+        TrackSectionItem {
+            id: innerTrackRight
+
+            width: 50
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
         }
     }
-
-    //    property variant clickBoxes: [
-    //        [topLevel.width/2 - 10, topLevel.height/2 - 190],
-    //        [topLevel.width/2 - 10, topLevel.height/2+170],
-    //        [topLevel.width/2 - 10, topLevel.height/2-160],
-    //        [topLevel.width/2 - 10, topLevel.height/2+140],
-    //        [topLevel.width/2 - 10, topLevel.height/2+110],
-    //        [topLevel.width/2 - baseLength - 40, topLevel.height/2+110],
-    //        [topLevel.width/2 - 10, topLevel.height/2+80],
-
-    //        [topLevel.width/2 - baseLength - 70, topLevel.height/2+80],
-    //        [topLevel.width/2 - baseLength - 75, topLevel.height/2+50],
-    //        [topLevel.width/2 - baseLength - 80, topLevel.height/2+20],
-
-    //        [topLevel.width/2 + baseLength - 60, topLevel.height/2+80],
-
-    //        [topLevel.width/2 + baseLength + 20, topLevel.height/2+110],
-    //        [topLevel.width/2 + baseLength + 30, topLevel.height/2+80],
-    //        [topLevel.width/2 + baseLength + 40, topLevel.height/2+50],
-    //    ]
-
-
-    //    Controller {
-    //        id: controller
-    //    }
-
-
-    //    ServerPopup {
-    //        visible: !controller.connected
-    //        controllerObj: controller
-    //    }
-
-
-
-    //    TrackCanvas {
-    //        id: trackDisplay
-    //        lineModel: controller.lineModel
-    //    }
-
-    //    SelectControllerPopup
-    //    {
-    //        id: selectControllerDlg
-
-    //        lineModel: controller.lineModel
-
-    //        anchors.fill: parent
-
-    //        visible: false
-    //    }
-
-
-    //    // Refresh and send data
-    //    Column {
-    //        anchors.top: parent.top
-    //        anchors.left: parent.left
-    //        MouseArea {
-    //            width: 100
-    //            height: 50
-
-    //            Rectangle {
-    //                border.color: "black"
-    //                radius: 5
-    //                anchors.fill: parent
-
-    //                Text {
-    //                    text: "Refresh"
-    //                    anchors.centerIn: parent
-    //                }
-    //            }
-
-    //            onClicked: controller.refreshState()
-    //        }
-    //        MouseArea {
-    //            width: 100
-    //            height: 50
-
-    //            Rectangle {
-    //                border.color: "black"
-    //                color: parent.pressed ? "black" : "white"
-    //                radius: 5
-    //                anchors.fill: parent
-
-    //                Text {
-    //                    text: "Submit"
-    //                    anchors.centerIn: parent
-    //                }
-    //            }
-
-    //            onClicked: controller.refreshState()
-    //        }
-    //    }
-
-    //    // Click points
-    //    Repeater {
-    //        model: controller.lineModel
-    //        Rectangle {
-    //            x: clickBoxes[index][0]
-    //            y: clickBoxes[index][1]
-    //            width: 20
-    //            height: 20
-    //            color: controller.lineModel.controllerColour(controllerID)
-
-    //            radius: 10
-
-    //            MouseArea{
-    //                anchors.fill: parent
-    //                onClicked: selectControllerDlg.selectController(index, possibleControllers)
-    //            }
-    //        }
-    //    }
-
 }

@@ -24,12 +24,17 @@ QSGNode *TrackSectionItem::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
 
     Q_ASSERT(node->childCount()==2);
 
+    const qreal lineWidth = 3.0;
+    const qreal topLine = height()/3.0 - lineWidth/2;
+    const qreal bottomLine = 2.0*height()/3.0 - lineWidth/2;
+
+
     QSGSimpleRectNode *n = static_cast<QSGSimpleRectNode *>(node->childAtIndex(0));
-    n->setRect(0, height()/3, width(), 3);
+    n->setRect(0, topLine, width(), lineWidth);
     n->setColor( TrackSection::voltageToColor(m_pSection->leftVoltage()));
 
     n = static_cast<QSGSimpleRectNode *>(node->childAtIndex(1));
-    n->setRect(0, 2*height()/3, width(), 3);
+    n->setRect(0, bottomLine, width(), lineWidth);
     n->setColor( TrackSection::voltageToColor(m_pSection->rightVoltage()));
 
 

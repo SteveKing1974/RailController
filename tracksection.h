@@ -30,6 +30,10 @@ public:
     Q_INVOKABLE void connectSection(TrackSection* pSec, int arg);
     Q_INVOKABLE void disconnectSection(TrackSection* pSec, int arg);
 
+
+    Q_INVOKABLE void connectSectionReversed(TrackSection* pSec);
+    Q_INVOKABLE void disconnectSectionReversed(TrackSection* pSec);
+
     void showConnections() const;
 
     static  QColor voltageToColor(int voltage);
