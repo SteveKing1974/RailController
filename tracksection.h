@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QColor>
+#include <QList>
 
 class TrackSection : public QObject
 {
@@ -29,6 +30,8 @@ public:
     Q_INVOKABLE void connectSection(TrackSection* pSec, int arg);
     Q_INVOKABLE void disconnectSection(TrackSection* pSec, int arg);
 
+    void showConnections() const;
+
     static  QColor voltageToColor(int voltage);
 
 signals:
@@ -43,6 +46,8 @@ private:
     int m_LeftVoltage;
     int m_RightVoltage;
 
+    QList<TrackSection*> m_ConnectedToLeft;
+    QList<TrackSection*> m_ConnectedToRight;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(TrackSection::Sides)

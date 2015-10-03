@@ -88,6 +88,7 @@ void PointSectionItem::setDirection(int newVal)
             m_pPointSection->setDirection(static_cast<PointSection::SwitchDirection>(m_Direction));
         }
         emit directionChanged();
+        update();
     }
 }
 
@@ -119,43 +120,53 @@ QSGNode *PointSectionItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePain
     // Bottom line
     QSGSimpleRectNode *n = static_cast<QSGSimpleRectNode *>(node->childAtIndex(0));
     n->setRect(0, 2*height()/3, width(), 3);
-    n->setColor(Qt::black);
+    n->setColor(TrackSection::voltageToColor(m_pCommon->rightVoltage()));
 
     QSGTransformNode* txNode = static_cast<QSGTransformNode *>(node->childAtIndex(1));
     QTransform t;
     t.translate(width()/3.0,height()/3.0);
-    t.rotate(m_Direction ? 0 : -45);
+    t.rotate(-45);
     txNode->setMatrix(QMatrix4x4(t));
     n = static_cast<QSGSimpleRectNode *>(txNode->childAtIndex(0));
     n->setRect(0, 0, width()/3, 3);
-    n->setColor(Qt::black);
+    n->setColor(TrackSection::voltageToColor(m_pLeft->leftVoltage()));
 
     n = static_cast<QSGSimpleRectNode *>(node->childAtIndex(2));
     n->setRect(0, height()/3, width()/3, 3);
-    n->setColor(Qt::black);
+    n->setColor(TrackSection::voltageToColor(m_pCommon->leftVoltage()));
 
     n = static_cast<QSGSimpleRectNode *>(node->childAtIndex(3));
     n->setRect(2*width()/3, height()/3, width()/3, 3);
-    n->setColor(Qt::black);
+    n->setColor(TrackSection::voltageToColor(m_pRight->leftVoltage()));
 
     txNode = static_cast<QSGTransformNode *>(node->childAtIndex(4));
     QTransform t2;
     t2.translate(2*width()/3.0,height()/3.0);
-    t2.rotate(m_Direction ? 0 : -45);
+    t2.rotate(-45);
     txNode->setMatrix(QMatrix4x4(t2));
     n = static_cast<QSGSimpleRectNode *>(txNode->childAtIndex(0));
     n->setRect(0, 0, width()/3, 3);
-    n->setColor(Qt::black);
+    n->setColor(TrackSection::voltageToColor(m_pLeft->rightVoltage()));
 
     txNode = static_cast<QSGTransformNode *>(node->childAtIndex(5));
     QTransform t3;
-    t3.translate(width()/3.0,2*height()/3.0);
-    t3.rotate(m_Direction ? 0 : -45);
-    txNode->setMatrix(QMatrix4x4(t3));
     n = static_cast<QSGSimpleRectNode *>(txNode->childAtIndex(0));
-    n->setRect(0, 0, 1.4*width()/3, 3);
-    n->setColor(Qt::black);
 
+    if (m_Direction)
+    {
+        t3.translate(width()/3.0,height()/3.0);
+        t3.rotate(0);
+        n->setRect(0, 0, width()/3, 3);
+    }
+    else
+    {
+        t3.translate(width()/3.0,2*height()/3.0);
+        t3.rotate(-45);
+        n->setRect(0, 0, 1.4*width()/3, 3);
+    }
+
+    txNode->setMatrix(QMatrix4x4(t3));
+    n->setColor(m_Direction ? TrackSection::voltageToColor(m_pCommon->leftVoltage()) : TrackSection::voltageToColor(m_pCommon->rightVoltage()));
 
     return node;
 }
@@ -165,9 +176,9 @@ void PointSectionItem::createPoint()
     Q_ASSERT(m_pPointSection==0);
     if (m_pLeft==0 || m_pRight==0 || m_pCommon==0)  return;
 
-    m_pPointSection = new PointSection(qobject_cast<TrackSection*>(m_pLeft),
+    m_pPointSection = new PointSection(qobject_cast<TrackSection*>(m_pCommon),
+                                       qobject_cast<TrackSection*>(m_pLeft),
                                        qobject_cast<TrackSection*>(m_pRight),
-                                       qobject_cast<TrackSection*>(m_pCommon),
                                        static_cast<PointSection::SwitchDirection>(m_Direction),
                                        this);
 

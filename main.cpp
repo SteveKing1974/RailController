@@ -8,6 +8,7 @@
 #include "breaksectionitem.h"
 #include "pointsectionitem.h"
 #include "tracksection.h"
+#include "powersupply.h"
 
 int main(int argc, char *argv[])
 {
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<TrackSectionItem>("com.elmsoft.qmlcomponents", 1, 0, "TrackSectionItem");
     qmlRegisterType<BreakSectionItem>("com.elmsoft.qmlcomponents", 1, 0, "BreakSectionItem");
     qmlRegisterType<PointSectionItem>("com.elmsoft.qmlcomponents", 1, 0, "PointSectionItem");
+    qmlRegisterType<PowerSupply>("com.elmsoft.qmlcomponents", 1, 0, "PowerSupply");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

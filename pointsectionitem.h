@@ -4,6 +4,7 @@
 #include <QQuickItem>
 
 class PointSection;
+class TrackSection;
 
 class PointSectionItem : public QQuickItem
 {
@@ -46,9 +47,9 @@ private:
     int m_Direction;
     PointSection* m_pPointSection;
 
-    QObject* m_pLeft;
-    QObject* m_pRight;
-    QObject* m_pCommon;
+    TrackSection* m_pLeft;
+    TrackSection* m_pRight;
+    TrackSection* m_pCommon;
 };
 
 #endif // POINTSECTIONITEM_H

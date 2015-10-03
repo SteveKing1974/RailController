@@ -1,4 +1,5 @@
 #include "pointsection.h"
+#include <QDebug>
 
 PointSection::PointSection(TrackSection* pCommon,
                            TrackSection* pLeftBranch,
@@ -15,14 +16,15 @@ PointSection::PointSection(TrackSection* pCommon,
     pCommon->connectSection(pLeftBranch, TrackSection::eLeft);
     pCommon->connectSection(pRightBranch, TrackSection::eRight);
 
-    configureDirection();
-
     connect(m_pLeft, SIGNAL(leftVoltageChanged(int)), this, SIGNAL(voltageChanged()));
     connect(m_pLeft, SIGNAL(rightVoltageChanged(int)), this, SIGNAL(voltageChanged()));
     connect(m_pRight, SIGNAL(leftVoltageChanged(int)), this, SIGNAL(voltageChanged()));
     connect(m_pRight, SIGNAL(rightVoltageChanged(int)), this, SIGNAL(voltageChanged()));
     connect(m_pCommon, SIGNAL(leftVoltageChanged(int)), this, SIGNAL(voltageChanged()));
     connect(m_pCommon, SIGNAL(rightVoltageChanged(int)), this, SIGNAL(voltageChanged()));
+
+    configureDirection();
+
 }
 
 void PointSection::setDirection(SwitchDirection newVal)
@@ -46,6 +48,10 @@ void PointSection::configureDirection()
     else
     {
         m_pCommon->disconnectSection(m_pLeft, TrackSection::eRight);
+
         m_pCommon->connectSection(m_pRight, TrackSection::eLeft);
     }
+
+
+    emit voltageChanged();
 }

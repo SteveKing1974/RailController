@@ -10,9 +10,11 @@ TrackSection::TrackSection(QObject *parent) :
 
 void TrackSection::setLeftVoltage(int val)
 {
+    //qDebug() << "Left voltage of" << this << "is" << val << "Current" << m_LeftVoltage;
+
     if (val != m_LeftVoltage)
     {
-        qDebug() << "Left voltage of" << this << "is" << val << "Current" << m_LeftVoltage;
+
         m_LeftVoltage  = val;
         emit leftVoltageChanged(val);
     }
@@ -24,7 +26,7 @@ void TrackSection::setRightVoltage(int val)
 {
     if (val != m_RightVoltage)
     {
-        qDebug() << "Right voltage of" << this << "is" << val;
+        //qDebug() << "Right voltage of" << this << "is" << val;
         m_RightVoltage  = val;
         emit rightVoltageChanged(val);
     }
@@ -65,6 +67,8 @@ void TrackSection::connectSection(TrackSection* pSec, int arg)
                 pSec->setLeftVoltage(m_LeftVoltage);
             }
         }
+
+        m_ConnectedToLeft.append(pSec);
     }
     if (s.testFlag(eRight))
     {
@@ -82,12 +86,14 @@ void TrackSection::connectSection(TrackSection* pSec, int arg)
                 pSec->setRightVoltage(m_RightVoltage);
             }
         }
+        m_ConnectedToRight.append(pSec);
     }
 }
 
 void TrackSection::disconnectSection(TrackSection* pSec, int arg)
 {
     const Sides s(arg);
+
     if (s.testFlag(eLeft))
     {
         disconnect(this, SIGNAL(leftVoltageChanged(int)), pSec, SLOT(setLeftVoltage(int)));
@@ -95,6 +101,7 @@ void TrackSection::disconnectSection(TrackSection* pSec, int arg)
 
         setLeftVoltage(-1);
         pSec->setLeftVoltage(-1);
+        m_ConnectedToLeft.removeOne(pSec);
     }
     if (s.testFlag(eRight))
     {
@@ -103,5 +110,12 @@ void TrackSection::disconnectSection(TrackSection* pSec, int arg)
 
         setRightVoltage(-1);
         pSec->setRightVoltage(-1);
+        m_ConnectedToRight.removeOne(pSec);
     }
+}
+
+void TrackSection::showConnections() const
+{
+    qDebug() << "Connected to (left)" << m_ConnectedToLeft;
+    qDebug() << "Connected to (right)" << m_ConnectedToRight;
 }

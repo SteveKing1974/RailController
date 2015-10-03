@@ -16,16 +16,23 @@ ApplicationWindow {
     property int baseLength: 200
 
     Component.onCompleted: {
-        print("Left is ", leftTrack.section, "Right is",  breakSection.leftSection, breakSection.rightSection)
         leftTrack.section.connectSection(breakSection.leftSection, 3)
-        //breakSection.rightSection.connectSection(pointSection.commonSection, 3)
-        leftTrack.section.setLeftVoltage(2)
-        leftTrack.section.setRightVoltage(1)
+        breakSection.rightSection.connectSection(pointSection.commonSection, 3)
     }
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: breakSection.enabled = !breakSection.enabled
+
+
+    Rectangle {
+        id: powerSupply
+        width: 20
+        height: 20
+        color: "green"
+
+        PowerSupply {
+            leftVoltage: 2
+            rightVoltage: 1
+            connectedSection: leftTrack.section
+        }
     }
 
     TrackSectionItem {
@@ -41,14 +48,24 @@ ApplicationWindow {
         width: 200
         height: 200
         enabled: false
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: breakSection.enabled = !breakSection.enabled
+        }
     }
 
     PointSectionItem {
         id: pointSection
-        x:400
+        anchors.left: breakSection.right
         width: 200
         height: 200
-        enabled: false
+        direction: 0
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: pointSection.direction = !pointSection.direction
+        }
     }
 
     //    property variant clickBoxes: [
