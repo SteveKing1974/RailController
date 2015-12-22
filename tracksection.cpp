@@ -42,6 +42,7 @@ QColor TrackSection::voltageToColor(int voltage)
     case 1: return Qt::red;
     case 2: return Qt::blue;
     case 3: return Qt::green;
+    case 4: return Qt::magenta;
     default:
         Q_ASSERT(0);
         return Qt::gray;

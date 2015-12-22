@@ -126,7 +126,7 @@ QSGNode *PointSectionItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePain
     const qreal heightVal = height()/3.0;
     const qreal straightLength = midPoint - 3.0*heightVal / 2.0;
     const qreal topLine = height()/3.0 - lineWidth/2;
-    const qreal angleLength = 1.4 * height()/3.0;
+    const qreal angleLength = 1.5 * height()/3.0;
     const qreal bottomLine = 2.0*height()/3.0 - lineWidth/2;
 
     // Bottom line
@@ -137,7 +137,7 @@ QSGNode *PointSectionItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePain
     // Angle left from top line
     QSGTransformNode* txNode = static_cast<QSGTransformNode *>(node->childAtIndex(1));
     QTransform t;
-    t.translate(straightLength-2, heightVal);
+    t.translate(straightLength-4, heightVal);
     t.rotate(-45);
     txNode->setMatrix(QMatrix4x4(t));
     n = static_cast<QSGSimpleRectNode *>(txNode->childAtIndex(0));
@@ -157,7 +157,7 @@ QSGNode *PointSectionItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePain
     // Angle right from top line
     txNode = static_cast<QSGTransformNode *>(node->childAtIndex(4));
     QTransform t2;
-    t2.translate(midPoint-heightVal/2.0, topLine);
+    t2.translate(midPoint-heightVal/2.0 + 1, topLine);
     t2.rotate(-45);
     txNode->setMatrix(QMatrix4x4(t2));
     n = static_cast<QSGSimpleRectNode *>(txNode->childAtIndex(0));
