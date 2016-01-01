@@ -26,6 +26,11 @@ void BreakSection::setState(SwitchState newVal)
     }
 }
 
+void BreakSection::nameChanged(const QString &newVal)
+{
+
+}
+
 void BreakSection::configureState()
 {
     if (m_SwitchState==eSwitchOpen)

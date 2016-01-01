@@ -76,7 +76,9 @@ ApplicationWindow {
         stationOuterSidingPoints.leftSection.connectSectionReversed(rightSidingSwitch2.commonSection, 3)
 
         rightSidingSwitch2.leftSection.connectSectionReversed(rightSiding2.section, 3)
-        rightSidingSwitch2.rightSection.connectSectionReversed(rightSidingUpper.section, 3)
+        rightSidingSwitch2.rightSection.connectSectionReversed(rightSidingBreak.leftSection, 3)
+
+        rightSidingBreak.rightSection.connectSection(rightSidingUpper.section, 3)
     }
 
     Item {
@@ -271,7 +273,7 @@ ApplicationWindow {
             anchors.bottom: innerTrackSection.top
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.leftMargin: 100
+            anchors.leftMargin: 20
             anchors.rightMargin: 0
 
             height: trackHeight
@@ -288,7 +290,7 @@ ApplicationWindow {
             TrackSectionItem {
                 id: stationHeadShuntLeft
 
-                width: 150
+                width: 270
 
                 anchors.left: parent.left
                 anchors.top: parent.top
@@ -387,7 +389,7 @@ ApplicationWindow {
             anchors.bottom: stationOuterSection.top
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.leftMargin: 100
+            anchors.leftMargin: 20
             anchors.rightMargin: 0
 
             height: trackHeight
@@ -395,7 +397,8 @@ ApplicationWindow {
             Component.onCompleted: {
                 stationInnerLoopSwitchLeft.commonSection.connectSectionReversed(stationInnerMiddle.section, 3)
                 stationInnerLoopSwitchRight.commonSection.connectSectionReversed(stationInnerMiddle.section, 3)
-                stationInnerLoopSwitchRight.rightSection.connectSectionReversed(stationInnerHeadShuntRight.section, 3)
+                stationInnerLoopSwitchRight.rightSection.connectSectionReversed(stationInnerHeadShuntRightBreak.leftSection, 3)
+                stationInnerHeadShuntRightBreak.rightSection.connectSection(stationInnerHeadShuntRight.section, 3)
 
                 leftSidingSwitch.commonSection.connectSectionReversed(stationInnerLoopSwitchLeft.rightSection, 3)
                 leftSidingSwitch.rightSection.connectSection(stationSiding1Left.section, 3)
@@ -403,13 +406,16 @@ ApplicationWindow {
                 leftSidingSwitch.leftSection.connectSectionReversed(leftSidingSwitch2.commonSection, 3)
 
                 leftSidingSwitch2.leftSection.connectSectionReversed(leftSiding2.section, 3)
-                leftSidingSwitch2.rightSection.connectSectionReversed(leftSidingUpper.section, 3)
+
+                leftSidingBreak.leftSection.connectSection(leftSidingUpper.section, 3)
+                leftSidingSwitch2.rightSection.connectSectionReversed(leftSidingBreak.rightSection, 3)
+
             }
 
             TrackSectionItem {
                 id: stationSiding1Left
 
-                width: 50
+                width: 170
 
                 anchors.left: parent.left
                 anchors.top: parent.top
@@ -438,7 +444,7 @@ ApplicationWindow {
                 id: leftSidingSwitch2
 
                 anchors.left: parent.left
-                anchors.leftMargin: 23
+                anchors.leftMargin: 143
                 anchors.top: parent.top
                 anchors.topMargin: -53
                 anchors.bottomMargin: 53
@@ -456,7 +462,7 @@ ApplicationWindow {
             TrackSectionItem {
                 id: leftSiding2
 
-                width: 70
+                width: 190
                 anchors.left: parent.left
                 anchors.top: parent.top
                 anchors.topMargin: -32
@@ -467,7 +473,7 @@ ApplicationWindow {
             Rectangle {
                 color: "white"
 
-                width: 57
+                width: 175
                 anchors.left: parent.left
                 anchors.top: parent.top
                 anchors.topMargin: -72
@@ -476,8 +482,26 @@ ApplicationWindow {
                 TrackSectionItem {
                     id: leftSidingUpper
 
-                    anchors.fill: parent
+                    anchors.left: parent.left
+                    anchors.right: leftSidingBreak.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
 
+                }
+
+                BreakSectionItem {
+                    id: leftSidingBreak
+
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+
+                    width: 50
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: leftSidingBreak.enabled = !leftSidingBreak.enabled
+                    }
                 }
             }
 
@@ -492,6 +516,11 @@ ApplicationWindow {
                 direction: 1
 
                 rotation: 180
+
+//                Rectangle {
+//                    anchors.fill: parent
+//                    color: "yellow"
+//                }
 
                 MouseArea {
                     anchors.fill: parent
@@ -511,7 +540,7 @@ ApplicationWindow {
             PointSectionItem {
                 id: stationInnerLoopSwitchRight
 
-                anchors.right: stationInnerHeadShuntRight.left
+                anchors.right: stationInnerHeadShuntRightBreak.left
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 direction: 1
@@ -527,12 +556,26 @@ ApplicationWindow {
             }
 
 
+            BreakSectionItem {
+                id: stationInnerHeadShuntRightBreak
+
+                anchors.right: stationInnerHeadShuntRight.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+
+                width: 50
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: stationInnerHeadShuntRightBreak.enabled = !stationInnerHeadShuntRightBreak.enabled
+                }
+            }
 
             TrackSectionItem {
                 id: stationInnerHeadShuntRight
 
                 width: 50
-                anchors.rightMargin: 250
+                anchors.rightMargin: 200
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
@@ -582,8 +625,26 @@ ApplicationWindow {
                 TrackSectionItem {
                     id: rightSidingUpper
 
-                    anchors.fill: parent
+                    anchors.left: rightSidingBreak.right
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
 
+                }
+
+                BreakSectionItem {
+                    id: rightSidingBreak
+
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+
+                    width: 50
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: rightSidingBreak.enabled = !rightSidingBreak.enabled
+                    }
                 }
             }
         }
