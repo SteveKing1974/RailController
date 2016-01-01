@@ -20,29 +20,7 @@ ApplicationWindow {
         color: "white"
     }
 
-    Component.onCompleted: {
-        outerTrackLeft.section.connectSection(outerSwitchLeft.commonSection, 3)
-        outerTrackLeft.section.connectSection(outerTrackRight.section, 3)
-        outerSwitchLeft.rightSection.connectSection(outerTrackMiddle.section, 3)
-        outerTrackMiddle.section.connectSection(outerSwitchRight.rightSection, 3)
-        outerSwitchRight.commonSection.connectSection(outerTrackRight.section, 3)
 
-        innerTrackLeft.section.connectSectionReversed(innerSwitchLeft.rightSection)
-        innerTrackLeft.section.connectSection(innerTrackRight.section, 3)
-        innerSwitchLeft.commonSection.connectSectionReversed(innerTrackMiddle.section, 3)
-        innerTrackMiddle.section.connectSection(innerStationSwitch.rightSection, 3)
-        innerStationSwitch.commonSection.connectSectionReversed(innerSwitchRight.commonSection, 3)
-        innerSwitchRight.rightSection.connectSectionReversed(innerTrackRight.section, 3)
-
-        outerSwitchLeft.leftSection.connectSectionReversed(innerSwitchLeft.leftSection, 3)
-        outerSwitchRight.leftSection.connectSectionReversed(innerSwitchRight.leftSection, 3)
-
-        stationHeadShuntLeft.section.connectSection(stationOuterLoopSwitchLeft.commonSection, 3)
-        stationOuterLoopSwitchLeft.rightSection.connectSection(stationOuterMiddle.section, 3)
-        stationOuterMiddle.section.connectSection(stationOuterToInner.rightSection, 3)
-        stationOuterToInner.commonSection.connectSectionReversed(stationOuterSidingsRight.commonSection)
-        stationOuterSidingsRight.rightSection.connectSectionReversed(stationOuterSidingRight.section)
-    }
 
     Rectangle {
         id: powerSupply2
@@ -84,6 +62,22 @@ ApplicationWindow {
         }
     }
 
+    Component.onCompleted: {
+        outerSwitchLeft.leftSection.connectSectionReversed(innerSwitchLeft.leftSection, 3)
+        outerSwitchRight.leftSection.connectSectionReversed(innerSwitchRight.leftSection, 3)
+        stationInnerMiddle.section.connectSection(stationHeadShuntLeft.section, 3)
+
+        innerStationSwitch.leftSection.connectSectionReversed(stationOuterEntrance.leftSection, 3)
+
+        stationOuterToInner.leftSection.connectSectionReversed(stationInnerLoopSwitchRight.leftSection, 3)
+        stationOuterLoopSwitchLeft.leftSection.connectSectionReversed(stationInnerLoopSwitchLeft.leftSection, 3)
+
+        // Right section items
+        stationOuterSidingPoints.leftSection.connectSectionReversed(rightSidingSwitch2.commonSection, 3)
+
+        rightSidingSwitch2.leftSection.connectSectionReversed(rightSiding2.section, 3)
+        rightSidingSwitch2.rightSection.connectSectionReversed(rightSidingUpper.section, 3)
+    }
 
     Item {
         anchors.fill: parent
@@ -99,6 +93,14 @@ ApplicationWindow {
             anchors.right: parent.right
 
             height: trackHeight
+
+            Component.onCompleted: {
+                outerTrackLeft.section.connectSection(outerSwitchLeft.commonSection, 3)
+                outerTrackLeft.section.connectSection(outerTrackRight.section, 3)
+                outerSwitchLeft.rightSection.connectSection(outerTrackMiddle.section, 3)
+                outerTrackMiddle.section.connectSection(outerSwitchRight.rightSection, 3)
+                outerSwitchRight.commonSection.connectSection(outerTrackRight.section, 3)
+            }
 
             TrackSectionItem {
                 id: outerTrackLeft
@@ -170,6 +172,15 @@ ApplicationWindow {
             anchors.right: parent.right
 
             height: trackHeight
+
+            Component.onCompleted: {
+                innerTrackLeft.section.connectSectionReversed(innerSwitchLeft.rightSection)
+                innerTrackLeft.section.connectSection(innerTrackRight.section, 3)
+                innerSwitchLeft.commonSection.connectSectionReversed(innerTrackMiddle.section, 3)
+                innerTrackMiddle.section.connectSection(innerStationSwitch.rightSection, 3)
+                innerStationSwitch.commonSection.connectSectionReversed(innerSwitchRight.commonSection, 3)
+                innerSwitchRight.rightSection.connectSectionReversed(innerTrackRight.section, 3)
+            }
 
             TrackSectionItem {
                 id: innerTrackLeft
@@ -265,6 +276,15 @@ ApplicationWindow {
 
             height: trackHeight
 
+            Component.onCompleted: {
+                stationHeadShuntLeft.section.connectSection(stationOuterLoopSwitchLeft.commonSection, 3)
+                stationOuterLoopSwitchLeft.rightSection.connectSection(stationOuterMiddle.section, 3)
+                stationOuterMiddle.section.connectSection(stationOuterToInner.rightSection, 3)
+                stationOuterToInner.commonSection.connectSectionReversed(stationOuterEntrance.commonSection)
+                stationOuterEntrance.rightSection.connectSectionReversed(stationOuterSidingPoints.commonSection)
+                stationOuterSidingPoints.rightSection.connectSection(stationOuterSidingRight.section, 3)
+            }
+
             TrackSectionItem {
                 id: stationHeadShuntLeft
 
@@ -345,13 +365,9 @@ ApplicationWindow {
                 direction: 1
                 width: 100
 
-                //rotation: 180
-
-                //transform: Rotation { origin.x: stationInnerSidingRight1.width/2; axis { x: 0; y: 1; z: 0 } angle: 180 }
-
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: stationInnerSidingRight1.direction = !stationInnerSidingRight1.direction
+                    onClicked: stationOuterSidingPoints.direction = !stationOuterSidingPoints.direction
                 }
             }
 
@@ -375,6 +391,20 @@ ApplicationWindow {
             anchors.rightMargin: 0
 
             height: trackHeight
+
+            Component.onCompleted: {
+                stationInnerLoopSwitchLeft.commonSection.connectSectionReversed(stationInnerMiddle.section, 3)
+                stationInnerLoopSwitchRight.commonSection.connectSectionReversed(stationInnerMiddle.section, 3)
+                stationInnerLoopSwitchRight.rightSection.connectSectionReversed(stationInnerHeadShuntRight.section, 3)
+
+                leftSidingSwitch.commonSection.connectSectionReversed(stationInnerLoopSwitchLeft.rightSection, 3)
+                leftSidingSwitch.rightSection.connectSection(stationSiding1Left.section, 3)
+
+                leftSidingSwitch.leftSection.connectSectionReversed(leftSidingSwitch2.commonSection, 3)
+
+                leftSidingSwitch2.leftSection.connectSectionReversed(leftSiding2.section, 3)
+                leftSidingSwitch2.rightSection.connectSectionReversed(leftSidingUpper.section, 3)
+            }
 
             TrackSectionItem {
                 id: stationSiding1Left
@@ -417,7 +447,6 @@ ApplicationWindow {
                 width: 100
 
                 rotation: 225
-                //transform: Rotation { origin.x: leftSidingSwitch2.width/2; axis { x: 0; y: 1; z: 0 } angle: 180 }
 
                 MouseArea {
                     anchors.fill: parent

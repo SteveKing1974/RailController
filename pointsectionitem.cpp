@@ -186,6 +186,8 @@ QSGNode *PointSectionItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePain
     txNode->setMatrix(QMatrix4x4(t3));
     n->setColor(m_Direction ? TrackSection::voltageToColor(m_pCommon->leftVoltage()) : TrackSection::voltageToColor(m_pCommon->rightVoltage()));
 
+    // Debug display of squares
+#if 0
     n = static_cast<QSGSimpleRectNode *>(node->childAtIndex(6));
     n->setRect(0, height()/2, 10, 10);
     n->setColor(Qt::red);
@@ -197,6 +199,7 @@ QSGNode *PointSectionItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePain
     n = static_cast<QSGSimpleRectNode *>(node->childAtIndex(8));
     n->setRect(width()/2, 10, 10, 10);
     n->setColor(Qt::blue);
+#endif
 
     return node;
 }
