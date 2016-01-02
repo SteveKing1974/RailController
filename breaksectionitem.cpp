@@ -14,6 +14,10 @@ BreakSectionItem::BreakSectionItem(QQuickItem *parent) :
     m_pRight(0),
     m_Enabled(false)
 {
+    QObject* pModel = qApp->property("LineStateModel").value<QObject*>();
+    connect(this, SIGNAL(sectionCreated(QString,BreakSection*)), pModel, SLOT(regsiterItem(QString, BreakSection*)));
+    connect(this, SIGNAL(objectNameChanged(QString)), this, SLOT(nameChanged(QString)));
+
     setLeftSection(new TrackSection(this));
     setRightSection(new TrackSection(this));
     setFlag(QQuickItem::ItemHasContents);
@@ -141,6 +145,11 @@ QSGNode *BreakSectionItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePain
     return node;
 }
 
+void BreakSectionItem::nameChanged(const QString &newName)
+{
+    emit sectionCreated(objectName(), m_pBreakSection);
+}
+
 void BreakSectionItem::createBreak()
 {
     Q_ASSERT(m_pBreakSection==0);
@@ -151,4 +160,6 @@ void BreakSectionItem::createBreak()
                                        m_Enabled ? BreakSection::eSwitchClosed : BreakSection::eSwitchOpen,
                                        this);
     connect(m_pBreakSection, SIGNAL(voltageChanged()), this, SLOT(update()));
+
+    emit sectionCreated(objectName(), m_pBreakSection);
 }

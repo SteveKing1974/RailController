@@ -15,6 +15,10 @@ PointSectionItem::PointSectionItem(QQuickItem *parent) :
     m_pRight(0),
     m_pCommon(0)
 {
+    QObject* pModel = qApp->property("LineStateModel").value<QObject*>();
+    connect(this, SIGNAL(sectionCreated(QString,PointSection*)), pModel, SLOT(regsiterItem(QString, PointSection*)));
+    connect(this, SIGNAL(objectNameChanged(QString)), this, SLOT(nameChanged(QString)));
+
     setLeftSection(new TrackSection(this));
     setRightSection(new TrackSection(this));
     setCommonSection(new TrackSection(this));
@@ -204,6 +208,11 @@ QSGNode *PointSectionItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePain
     return node;
 }
 
+void PointSectionItem::nameChanged(const QString &newName)
+{
+    emit sectionCreated(objectName(), m_pPointSection);
+}
+
 void PointSectionItem::createPoint()
 {
     Q_ASSERT(m_pPointSection==0);
@@ -216,4 +225,6 @@ void PointSectionItem::createPoint()
                                        this);
 
      connect(m_pPointSection, SIGNAL(voltageChanged()), this, SLOT(update()));
+
+     emit sectionCreated(objectName(), m_pPointSection);
 }

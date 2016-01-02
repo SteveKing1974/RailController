@@ -35,8 +35,10 @@ signals:
     void rightSectionChanged();
     void commonSectionChanged();
     void directionChanged();
+    void sectionCreated(const QString& name, PointSection* pSec);
 
-public slots:
+private slots:
+    void nameChanged(const QString& newName);
 
 protected:
     QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *);

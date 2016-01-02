@@ -34,7 +34,6 @@ signals:
     void stateChanged();
     void voltageChanged();
 
-public slots:
 
 private:
     void configureState();

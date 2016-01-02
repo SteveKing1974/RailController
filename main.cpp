@@ -10,12 +10,16 @@
 #include "tracksection.h"
 #include "powersupply.h"
 
+#include "linestatemodel.h"
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
+    LineStateModel* pModel = new LineStateModel(&app);
+    app.setProperty("LineStateModel", QVariant::fromValue<QObject*>(pModel));
+
     qmlRegisterType<Controller>("com.elmsoft.qmlcomponents", 1, 0, "Controller");
-    qmlRegisterUncreatableType<LineStateModel>("com.elmsoft.qmlcomponents", 1, 0, "LineStateModel", "Cannot create type");
 
     qmlRegisterUncreatableType<TrackSection>("com.elmsoft.qmlcomponents", 1, 0, "TrackSection", "Cannot create type");
 
@@ -26,6 +30,10 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+
+    QJsonDocument doc = pModel->toJson();
+
+    pModel->updateFromJson(doc);
 
     return app.exec();
 }

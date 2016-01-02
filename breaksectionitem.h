@@ -31,11 +31,14 @@ signals:
     void leftSectionChanged();
     void rightSectionChanged();
     void enabledChanged();
+    void sectionCreated(const QString& name, BreakSection* pSec);
 
-public slots:
 
 protected:
     QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *);
+
+private slots:
+    void nameChanged(const QString& newName);
 
 private:
     void createBreak();

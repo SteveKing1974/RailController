@@ -2,55 +2,33 @@
 #define LINESTATEMODEL_H
 
 #include <QObject>
-#include <QAbstractListModel>
-#include <QColor>
+#include <QHash>
+#include <QJsonDocument>
 
-#include "sectiondata.h"
+class BreakSection;
+class PointSection;
 
-class LineStateModel : public QAbstractListModel
+class LineStateModel : public QObject
 {
     Q_OBJECT
 
-    Q_ENUMS(LineRoles)
-    Q_ENUMS(ControllerID)
 public:
-    enum LineRoles {
-        eNameRole = Qt::DisplayRole,
-        eSectionRole = Qt::UserRole,
-        eControllerIDRole,
-        ePossibleControllersRole
-    };
-
-    enum ControllerID {
-        eNoController,
-        eController1,
-        eController2,
-        eController3
-    };
 
     LineStateModel(QObject *parent = 0);
     ~LineStateModel();
 
-    int rowCount(const QModelIndex &parent) const;
-    QVariant data(const QModelIndex &index, int role) const;
-
-    QHash<int, QByteArray> roleNames() const;
-
-    Q_INVOKABLE QString controllerName(ControllerID id) const;
-    Q_INVOKABLE QColor controllerColour(ControllerID id) const;
-
-    Q_INVOKABLE QColor sectionColour(int sectionIndex) const;
+     void updateFromJson(const QJsonDocument& source);
+    QJsonDocument toJson() const;
 
 public slots:
-    void changeController(int sectionIndex, int controllerId);
-    void stateChanged(const QList<SectionData> data);
+    void regsiterItem(const QString& name, BreakSection* pSec);
+    void regsiterItem(const QString& name, PointSection* pSec);
 
 signals:
-    void modelChanged();
 
 private:
-
-    QList<SectionData> m_Data;
+    QHash<QString, BreakSection*> m_Breaks;
+    QHash<QString, PointSection*> m_Points;
 };
 
 #endif // LINESTATEMODEL_H

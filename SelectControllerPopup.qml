@@ -1,5 +1,7 @@
 import QtQuick 2.0
 
+import com.elmsoft.qmlcomponents 1.0
+
 MouseArea {
     onClicked: visible = false
 

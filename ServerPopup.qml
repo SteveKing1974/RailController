@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import com.elmsoft.qmlcomponents 1.0
 
 MouseArea {
     id: selectServerDlg
@@ -6,7 +7,9 @@ MouseArea {
     anchors.fill: parent
 
     z: 2
-    property QtObject controllerObj: null
+    Controller {
+        id: controllerObj
+    }
 
     Rectangle {
         color: "black"
